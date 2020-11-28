@@ -1,0 +1,6 @@
+module Pods_Manga_MangaUITests {
+  umbrella header "Pods-Manga-MangaUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

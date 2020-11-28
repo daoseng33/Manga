@@ -1,0 +1,106 @@
+source 'https://cdn.cocoapods.org/'
+# Uncomment this line to define a global platform for your project
+platform :ios, '11.0'
+
+# ignore all warnings from all pods
+inhibit_all_warnings!
+
+# Change Old Objective-C Library Deployment Target
+# Because Xcode 10 New Build System Show Warning
+post_install do |installer|
+	installer.pods_project.targets.each do |target|
+		target.build_configurations.each do |config|
+			config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+			if config.name == 'Debug'
+        config.build_settings['OTHER_SWIFT_FLAGS'] = ['$(inherited)', '-Onone']
+        config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Owholemodule'
+      end
+		end
+	end
+end
+
+target "Mamilove" do
+	pod 'Branch', '~> 0.35'
+	pod 'AFMInfoBanner', '~> 1.2'
+	pod 'AFNetworking', '~> 4'
+	pod 'Amplitude-iOS', '~> 4.10'
+	pod 'GoogleIDFASupport', '~> 3.14'
+	pod 'TapstreamIOS', '~> 3.2'
+	pod 'APParallaxHeader', '0.1.6'
+	pod 'Aspects', '1.4.1'
+	pod 'BlocksKit', '2.2.5'
+	pod 'FBSDKCoreKit', '~> 8.1'
+	pod 'FBSDKLoginKit', '~> 8.1'
+	pod 'FBSDKShareKit', '~> 8.1'
+	pod 'FrameAccessor', '2.0.0'
+	pod 'Firebase/Core', '~> 7.1.0'
+	pod 'Firebase/Messaging', '~> 7.1'
+	pod 'Firebase/Analytics', '~> 7.1'
+	pod 'Firebase/RemoteConfig', '~> 7.1'
+	pod 'Firebase/Performance', '~> 7.1'
+	pod 'Firebase/Crashlytics', '~> 7.1'
+	pod 'Firebase/InAppMessaging', '~> 7.0'
+	pod 'GTMNSStringHTMLAdditions', '~> 0.2'
+	pod 'GUITabPagerViewController', :git => 'https://github.com/UPN-TW/GUITabPagerViewController' , :branch => 'master'
+	pod 'IDMPhotoBrowser', :git => 'https://github.com/thiagoperes/IDMPhotoBrowser.git', :commit => 'c677bc80a0c590d2af4aacf22973c7b1d65e3868'
+	pod 'SDWebImage', '~> 5.8'
+	pod 'JLRoutes', '2.1'
+	pod 'Mantle', '1.5.8'
+	pod 'MBProgressHUD', '~> 1.2.0'
+	pod 'FMDB', '2.6.2'
+	pod 'PureLayout', '2.0.6'
+	pod 'SZTextView', '1.2.1'
+	pod 'DeviceUtil', '3.0.1'
+	pod 'pop', '~> 1.0.9'
+	pod 'UIButton+MiddleAligning', '1.1.2'
+	pod 'UICollectionViewLeftAlignedLayout', '1.0.1'
+	pod 'AMScrollingNavbar', '~> 5.3'
+	pod 'ObjectiveLuhn', '1.0.2'
+	pod 'BKMoneyKit', '0.0.5'
+	pod 'CocoaSecurity', '1.2.4'
+	pod 'SAMKeychain', '1.5.3'
+	pod 'Shimmer'
+	pod 'KIImagePager', :git => 'https://github.com/UPN-TW/KIImagePager.git'
+	pod 'KMNavigationBarTransition', '1.1.6'
+	pod 'TTTAttributedLabel', '2.0.0'
+	pod 'TSMessages', :git => 'https://github.com/UPN-TW/TSMessages.git'
+  pod 'ZendeskChatSDK'
+	pod 'Texture', '~> 3'
+	pod 'PINRemoteImage/WebP', '~> 3'
+	pod 'FLAnimatedImage'
+	pod 'YoutubePlayer-in-WKWebView', :git => 'https://github.com/UPN-TW/YoutubePlayer-in-WKWebView' , :branch => 'fixed'
+	pod 'Moya', '~> 14.0'
+	pod 'Moya/RxSwift', '~> 14.0'
+	pod 'Reveal-SDK', '24', :configurations => ['Debug', 'CI']
+	pod 'SnapKit', '~> 5'
+	pod 'RxSwift', '~> 5'
+	pod 'RxCocoa', '~> 5'
+	pod "RxGesture"
+	pod 'RxDataSources', '~> 4.0'
+	pod 'RxKeyboard'
+	pod 'Kingfisher', '~> 5'
+	pod 'DateToolsSwift'
+	pod 'Hero'
+	pod 'SKPhotoBrowser'
+	pod 'XLPagerTabStrip', '~> 9.0'
+	pod 'IQKeyboardManagerSwift', '~> 6.5'
+	pod 'TLPhotoPicker'
+	pod 'GoogleSignIn'
+	pod 'YIInnerShadowView'
+	pod 'GoogleTagManager'
+	pod 'Cosmos', '~> 23'
+  pod 'MMKV'
+	pod 'HTMLEntities', :git => 'https://github.com/IBM-Swift/swift-html-entities.git'
+	pod 'Realm', '5.3.3', :modular_headers => true
+	pod 'RxRealm'
+	pod 'KeychainSwift', '~> 19.0'
+	pod 'WoodPeckeriOS', :configurations => ['Debug']
+  pod 'Valet', '~> 4.1'
+	target "MamiloveTests" do
+		inherit! :search_paths
+		pod 'RxBlocking', '~> 5'
+		pod 'RxTest', '~> 5'
+    pod 'MockingbirdFramework', '~> 0.15'
+    pod "SwiftyMocky"
+	end
+end

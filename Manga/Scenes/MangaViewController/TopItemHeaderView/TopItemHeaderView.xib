@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="TopItemHeaderView" customModule="Manga" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="iQU-x4-NCG">
+                    <rect key="frame" x="0.0" y="0.0" width="8" height="52"/>
+                    <subviews>
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L0C-A8-Uzk">
+                            <rect key="frame" x="0.0" y="0.0" width="4" height="52"/>
+                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fjl-cL-lp6">
+                            <rect key="frame" x="4" y="0.0" width="4" height="52"/>
+                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
+                    </subviews>
+                </stackView>
+                <stackView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="eYd-lt-YdU">
+                    <rect key="frame" x="0.0" y="0.0" width="365" height="52"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="bTc-jZ-J38">
+                            <rect key="frame" x="0.0" y="0.0" width="182.5" height="52"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="type ▾" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Chf-iE-orh">
+                                    <rect key="frame" x="63" y="0.0" width="57" height="26.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IG9-Cp-Jp4">
+                                    <rect key="frame" x="87.5" y="31.5" width="8" height="20.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="EfW-2m-ZS1">
+                            <rect key="frame" x="182.5" y="0.0" width="182.5" height="52"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="subtype ▾" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DgJ-r5-f04">
+                                    <rect key="frame" x="45.5" y="0.0" width="92" height="26.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="erv-dz-Q6F">
+                                    <rect key="frame" x="87.5" y="31.5" width="8" height="20.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                </stackView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LDe-mz-pCk">
+                    <rect key="frame" x="365" y="0.0" width="44" height="60"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="44" id="Fmk-4g-fbO"/>
+                    </constraints>
+                    <state key="normal" image="favorite_collection"/>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="iQU-x4-NCG" firstAttribute="top" secondItem="eYd-lt-YdU" secondAttribute="top" id="1wc-rg-al8"/>
+                <constraint firstAttribute="trailing" secondItem="LDe-mz-pCk" secondAttribute="trailing" constant="5" id="8Gf-pv-pWg"/>
+                <constraint firstItem="LDe-mz-pCk" firstAttribute="leading" secondItem="eYd-lt-YdU" secondAttribute="trailing" id="8Un-7m-dLg"/>
+                <constraint firstItem="iQU-x4-NCG" firstAttribute="leading" secondItem="eYd-lt-YdU" secondAttribute="leading" id="DXH-pH-aEE"/>
+                <constraint firstItem="iQU-x4-NCG" firstAttribute="bottom" secondItem="eYd-lt-YdU" secondAttribute="bottom" id="U45-mR-DDM"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="eYd-lt-YdU" secondAttribute="bottom" priority="750" id="aqj-As-suR"/>
+                <constraint firstItem="LDe-mz-pCk" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="j8I-AU-PpG"/>
+                <constraint firstItem="eYd-lt-YdU" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="kg2-Q9-hEc"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="LDe-mz-pCk" secondAttribute="bottom" id="tO4-yl-4E3"/>
+                <constraint firstItem="eYd-lt-YdU" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ya4-QX-gJK"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="favoriteButton" destination="LDe-mz-pCk" id="Npw-eh-j99"/>
+                <outlet property="selectedSubtypeLabel" destination="erv-dz-Q6F" id="45g-tz-U1x"/>
+                <outlet property="selectedTypeLabel" destination="IG9-Cp-Jp4" id="RlX-9V-BHH"/>
+                <outlet property="subtypeTextField" destination="Fjl-cL-lp6" id="OFt-03-itd"/>
+                <outlet property="typeTextField" destination="L0C-A8-Uzk" id="hwB-di-UgH"/>
+            </connections>
+            <point key="canvasLocation" x="131.8840579710145" y="118.52678571428571"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="favorite_collection" width="48" height="48"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

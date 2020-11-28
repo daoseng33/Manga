@@ -1,0 +1,13 @@
+sourceryCommand: null
+sourceryTemplate: null
+MangaTests:
+  sources:
+    include:
+    - ./Manga
+  output: ./MangaTests/Mock.generated.swift
+  targets:
+  - MangaTests
+  testable:
+  - Manga
+  import:
+  - Foundation

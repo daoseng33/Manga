@@ -1,0 +1,77 @@
+PODS:
+  - Alamofire (5.4.0)
+  - Kingfisher (5.15.7):
+    - Kingfisher/Core (= 5.15.7)
+  - Kingfisher/Core (5.15.7)
+  - MBProgressHUD (1.2.0)
+  - Moya/Core (14.0.0):
+    - Alamofire (~> 5.0)
+  - Moya/RxSwift (14.0.0):
+    - Moya/Core
+    - RxSwift (~> 5.0)
+  - Realm (10.1.4):
+    - Realm/Headers (= 10.1.4)
+  - Realm/Headers (10.1.4)
+  - RealmSwift (10.1.4):
+    - Realm (= 10.1.4)
+  - RxBlocking (5.1.1):
+    - RxSwift (~> 5)
+  - RxCocoa (5.1.1):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxGesture (3.0.2):
+    - RxCocoa (~> 5.1)
+    - RxSwift (~> 5.1)
+  - RxRelay (5.1.1):
+    - RxSwift (~> 5)
+  - RxSwift (5.1.1)
+  - Sourcery (1.0.2)
+  - SwiftyMocky (4.0.1):
+    - Sourcery (>= 1.0)
+
+DEPENDENCIES:
+  - Kingfisher (~> 5)
+  - MBProgressHUD (~> 1.2.0)
+  - Moya/RxSwift (~> 14.0)
+  - Realm (= 10.1.4)
+  - RealmSwift (= 10.1.4)
+  - RxBlocking (= 5.1.1)
+  - RxCocoa (= 5.1.1)
+  - RxGesture (= 3.0.2)
+  - RxSwift (= 5.1.1)
+  - SwiftyMocky
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - Kingfisher
+    - MBProgressHUD
+    - Moya
+    - Realm
+    - RealmSwift
+    - RxBlocking
+    - RxCocoa
+    - RxGesture
+    - RxRelay
+    - RxSwift
+    - Sourcery
+    - SwiftyMocky
+
+SPEC CHECKSUMS:
+  Alamofire: 3b6a534a3df22db367e4dedeeca73d1ddfcf0e2f
+  Kingfisher: 6e1a13523fcb1c86924ce53affe4ac957e544d59
+  MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
+  Realm: 80f4fb2971ccb9adc27a47d0955ae8e533a7030b
+  RealmSwift: 0e566ca714edb377bba8ea0811eafcea0b93734e
+  RxBlocking: 5f700a78cad61ce253ebd37c9a39b5ccc76477b4
+  RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
+  RxGesture: d6bd7447ca3a596c7a9702a6a2b6a2bb5d8bae54
+  RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
+  RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
+  Sourcery: e8951e8759ef6a3a0cce412db64832dd23343041
+  SwiftyMocky: 707d9cdd5decef8083f6dc76892977ee1cf8bbce
+
+PODFILE CHECKSUM: ccaa650201ec04cceed0372bb98379cb9dd99b00
+
+COCOAPODS: 1.10.0
