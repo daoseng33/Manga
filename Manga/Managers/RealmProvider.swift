@@ -19,7 +19,7 @@ struct RealmProvider {
     return try! Realm(configuration: configuration)
   }
   
-  // failedPaymentInfo
+  // favoriteItem
   private static let favoriteItemConfig = Realm.Configuration(
     schemaVersion: 1
   )

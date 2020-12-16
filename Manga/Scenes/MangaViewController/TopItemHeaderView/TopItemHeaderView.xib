@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -15,17 +15,17 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="iQU-x4-NCG">
-                    <rect key="frame" x="0.0" y="0.0" width="8" height="52"/>
+                    <rect key="frame" x="0.0" y="0.0" width="365" height="52"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L0C-A8-Uzk">
-                            <rect key="frame" x="0.0" y="0.0" width="4" height="52"/>
+                            <rect key="frame" x="0.0" y="0.0" width="182.5" height="52"/>
                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="textColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fjl-cL-lp6">
-                            <rect key="frame" x="4" y="0.0" width="4" height="52"/>
+                            <rect key="frame" x="182.5" y="0.0" width="182.5" height="52"/>
                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="textColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -92,6 +92,7 @@
                 <constraint firstItem="LDe-mz-pCk" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="j8I-AU-PpG"/>
                 <constraint firstItem="eYd-lt-YdU" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="kg2-Q9-hEc"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="LDe-mz-pCk" secondAttribute="bottom" id="tO4-yl-4E3"/>
+                <constraint firstItem="iQU-x4-NCG" firstAttribute="trailing" secondItem="eYd-lt-YdU" secondAttribute="trailing" id="w9P-oH-3z3"/>
                 <constraint firstItem="eYd-lt-YdU" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ya4-QX-gJK"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

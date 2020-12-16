@@ -51,10 +51,12 @@ class WebViewController: UIViewController {
   // MARK: - Setup
   private func setupUI() {
     view.addSubview(progressView)
-    progressView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-    progressView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-    progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-    progressView.heightAnchor.constraint(equalToConstant: 2).isActive = true
+    NSLayoutConstraint.activate([
+      progressView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      progressView.topAnchor.constraint(equalTo: view.topAnchor),
+      progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+      progressView.heightAnchor.constraint(equalToConstant: 2)
+    ])
   }
   
   private func setupObservable() {

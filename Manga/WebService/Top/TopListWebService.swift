@@ -59,35 +59,22 @@ protocol TopListWebServiceProtocol {
 }
 
 extension TopListWebServiceProtocol {
-  var provider: MoyaProvider<TopListAPI> {
-    return MoyaProvider<TopListAPI>.default
-  }
-  
   func fetchTopList(with type: TopListAPIType, page: Int) -> Single<TopList> {
-    return Single.create(subscribe: { single in
-      var subTypeString: String = ""
-      switch type {
-      case .anime(let subType):
-        subTypeString = subType.rawValue
-      case .manga(let subType):
-        subTypeString = subType.rawValue
-      }
-      
-      let disposable = MangaWebService.shared
-        .request(provider: provider, targetType: .list(type: type.typeString, subtype: subTypeString, page: page))
-        .map(TopList.self, using: JSONDecoder.default)
-        .subscribe({ event in
-          switch event {
-          case .success(let response):
-            single(.success(response))
-            
-          case .error(let error):
-            single(.error(error))
-          }
-        })
-      return Disposables.create([disposable])
-    })
+    
+    var subTypeString: String = ""
+    switch type {
+    case .anime(let subType):
+      subTypeString = subType.rawValue
+    case .manga(let subType):
+      subTypeString = subType.rawValue
+    }
+    
+    return MangaWebService.shared
+      .request(provider: provider, targetType: .list(type: type.typeString, subtype: subTypeString, page: page))
+      .map(TopList.self, using: JSONDecoder.default)
   }
 }
 
-struct TopListWebService: TopListWebServiceProtocol {}
+struct TopListWebService: TopListWebServiceProtocol {
+  var provider = MoyaProvider<TopListAPI>.default
+}
