@@ -160,8 +160,7 @@ class MangaViewController: UIViewController {
   private func setupActions() {
     // Handle done actions
     typePickerDoneButton.rx.tap
-      .asDriver()
-      .drive(onNext: { [weak self] in
+      .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
         let typeIndex = self.typePickerView.selectedRow(inComponent: 0)
         self.selectedPickerIndexRelay.accept((typeIndex, 0))
@@ -170,8 +169,7 @@ class MangaViewController: UIViewController {
       .disposed(by: disposeBag)
     
     subtypePickerDoneButton.rx.tap
-      .asDriver()
-      .drive(onNext: { [weak self] in
+      .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
         let subtypeIndex = self.subtypePickerView.selectedRow(inComponent: 0)
         self.selectedPickerIndexRelay.accept((self.selectedPickerIndex.typeIndex, subtypeIndex))
@@ -182,7 +180,6 @@ class MangaViewController: UIViewController {
     // Handle close actions
     Observable.of(typePickerCloseButton.rx.tap, subtypePickerCloseButton.rx.tap)
       .merge()
-      .observeOn(MainScheduler.instance)
       .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
         self.view.endEditing(true)
@@ -255,15 +252,16 @@ extension MangaViewController: UITableViewDataSource {
     
     cellViewModel.handleListTappedSubject
       .observeOn(MainScheduler.instance)
-      .subscribe(onNext: {
+      .subscribe(onNext: { [weak tableView] in
+        guard let tableView = tableView else { return }
         tableView.reloadRows(at: [indexPath], with: .none)
       })
-      .disposed(by: cellViewModel.disposeBag)
+      .disposed(by: cell.disposeBag)
     
     // Load more data
     viewModel.loadMoreData(with: indexPath.row)
       .subscribe()
-      .disposed(by: viewModel.disposeBag)
+      .disposed(by: cell.disposeBag)
     
     return cell
   }
@@ -302,8 +300,7 @@ extension MangaViewController: UITableViewDelegate {
     
     view.favoriteButton.rx
       .tap
-      .asDriver()
-      .drive(onNext: { [weak self] in
+      .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
         let favoriteVC = FavoriteItemViewController.storyboardInstance()
         favoriteVC.delegate = self

@@ -11,9 +11,7 @@ import RxSwift
 import Moya
 @testable import Manga
 struct MockTopListWebService: TopListWebServiceProtocol {
-  var provider: MoyaProvider<TopListAPI> {
-    return MoyaProvider<TopListAPI>(stubClosure: MoyaProvider.immediatelyStub)
-  }
+  let provider: MoyaProvider<TopListAPI> = MoyaProvider<TopListAPI>(stubClosure: MoyaProvider.immediatelyStub)
 }
 
 class MangaViewModelTests: XCTestCase {

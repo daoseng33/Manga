@@ -70,11 +70,10 @@ extension TopListWebServiceProtocol {
     }
     
     return MangaWebService.shared
-      .request(provider: provider, targetType: .list(type: type.typeString, subtype: subTypeString, page: page))
-      .map(TopList.self, using: JSONDecoder.default)
+      .request(provider: provider, targetType: .list(type: type.typeString, subtype: subTypeString, page: page), mappingType: TopList.self)
   }
 }
 
 struct TopListWebService: TopListWebServiceProtocol {
-  var provider = MoyaProvider<TopListAPI>.default
+  let provider = MoyaProvider<TopListAPI>.default
 }
