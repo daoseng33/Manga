@@ -191,7 +191,7 @@ class MangaViewController: UIViewController {
   private func fetchTopList(shouldShowHud: Bool = true, shouldReset: Bool = false) {
     var hud: MBProgressHUD?
     if shouldShowHud {
-      hud = ProgressHUDManager.shared.showHUD(view: self.view)
+      hud = ProgressHUDProvider.showHUD(view: self.view)
     }
     
     viewModel.fetchTopList(shouldReset: shouldReset)

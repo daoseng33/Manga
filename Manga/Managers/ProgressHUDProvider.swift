@@ -1,5 +1,5 @@
 //
-//  ProgressHudManager.swift
+//  ProgressHUDProvider.swift
 //  Manga
 //
 //  Created by Ray Dan on 2020/11/29.
@@ -10,11 +10,10 @@ enum HUDType {
   case dark
 }
 
-class ProgressHUDManager {
-  static let shared = ProgressHUDManager()
-  
+class ProgressHUDProvider {
   @discardableResult
-  func showHUD(view: UIView, type: HUDType = .dark) -> MBProgressHUD {
+  static func showHUD(view: UIView, type: HUDType = .dark) -> MBProgressHUD {
+    
     let hud = MBProgressHUD()
     hud.animationType = .fade
     hud.areDefaultMotionEffectsEnabled = true

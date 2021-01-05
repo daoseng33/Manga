@@ -33,7 +33,7 @@
 		1CB0386A2573B7600019EB15 /* TopItemHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CB038692573B7600019EB15 /* TopItemHeaderView.xib */; };
 		1CB0386F2573B9B00019EB15 /* UITableViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB0386E2573B9B00019EB15 /* UITableViewExtension.swift */; };
 		1CB038932573BFA70019EB15 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB038922573BFA70019EB15 /* UIViewExtension.swift */; };
-		1CB0392C2573D3BF0019EB15 /* ProgressHudManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB0392B2573D3BF0019EB15 /* ProgressHudManager.swift */; };
+		1CB0392C2573D3BF0019EB15 /* ProgressHUDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB0392B2573D3BF0019EB15 /* ProgressHUDProvider.swift */; };
 		1CBB76FD257418EA00A5C858 /* TopItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CBB76FB257418EA00A5C858 /* TopItemTableViewCell.xib */; };
 		1CCB7BDC257293F1008AD0D3 /* TopListAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCB7BDB257293F1008AD0D3 /* TopListAPI.swift */; };
 		1CCB7BE42573619E008AD0D3 /* MangaTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCB7BE32573619E008AD0D3 /* MangaTargetType.swift */; };
@@ -101,7 +101,7 @@
 		1CB038692573B7600019EB15 /* TopItemHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TopItemHeaderView.xib; sourceTree = "<group>"; };
 		1CB0386E2573B9B00019EB15 /* UITableViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewExtension.swift; sourceTree = "<group>"; };
 		1CB038922573BFA70019EB15 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
-		1CB0392B2573D3BF0019EB15 /* ProgressHudManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressHudManager.swift; sourceTree = "<group>"; };
+		1CB0392B2573D3BF0019EB15 /* ProgressHUDProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressHUDProvider.swift; sourceTree = "<group>"; };
 		1CB039302573D4F10019EB15 /* Manga-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Manga-Bridging-Header.h"; sourceTree = "<group>"; };
 		1CBB76FA257418EA00A5C858 /* TopItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopItemTableViewCell.swift; sourceTree = "<group>"; };
 		1CBB76FB257418EA00A5C858 /* TopItemTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TopItemTableViewCell.xib; sourceTree = "<group>"; };
@@ -217,7 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				1C0B12C22576A16A001CDAD6 /* Utility.swift */,
-				1CB0392B2573D3BF0019EB15 /* ProgressHudManager.swift */,
+				1CB0392B2573D3BF0019EB15 /* ProgressHUDProvider.swift */,
 				1C1FF73D2575409D00944BA2 /* RealmProvider.swift */,
 				1C15C703257541B90007D263 /* FavoriteItemService.swift */,
 			);
@@ -683,7 +683,7 @@
 				1CF2D88D257384BD005A52FE /* JsonDecoderExtension.swift in Sources */,
 				1CF2D872257378CF005A52FE /* MangaWebService.swift in Sources */,
 				1CCB7BE42573619E008AD0D3 /* MangaTargetType.swift in Sources */,
-				1CB0392C2573D3BF0019EB15 /* ProgressHudManager.swift in Sources */,
+				1CB0392C2573D3BF0019EB15 /* ProgressHUDProvider.swift in Sources */,
 				1C1FF6B02575205900944BA2 /* WKWebViewExtension.swift in Sources */,
 				1C2DEE422577F381004B2256 /* FavoriteItemViewModel.swift in Sources */,
 				1CCB7BDC257293F1008AD0D3 /* TopListAPI.swift in Sources */,

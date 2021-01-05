@@ -8,9 +8,9 @@
 import Foundation
 
 extension JSONDecoder {
-  static var `default`: JSONDecoder {
+  static let `default`: JSONDecoder = {
     let decoder = JSONDecoder()
     decoder.keyDecodingStrategy = .convertFromSnakeCase
     return decoder
-  }
+  }()
 }
