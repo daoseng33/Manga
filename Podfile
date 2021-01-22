@@ -21,7 +21,7 @@ target 'Manga' do
   pod 'Moya/RxSwift', '~> 14.0'
   pod 'RxSwift', '5.1.1'
   pod 'RxCocoa', '5.1.1'
-  pod 'Kingfisher', '~> 5'
+  pod 'Kingfisher', '~> 6'
   pod "RxGesture", '3.0.2'
   pod 'MBProgressHUD', '~> 1.2.0'
   pod 'RealmSwift', '10.1.4' 
