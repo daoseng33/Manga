@@ -16,8 +16,11 @@ post_install do |installer|
 	end
 end
 
+def custom_pods
+	pod 'DAOFloatingPanel'
+end
+
 target 'Manga' do
-  # Pods for Manga
   pod 'Moya/RxSwift', '~> 14.0'
   pod 'RxSwift', '5.1.1'
   pod 'RxCocoa', '5.1.1'
@@ -26,6 +29,7 @@ target 'Manga' do
   pod 'MBProgressHUD', '~> 1.2.0'
   pod 'RealmSwift', '10.1.4' 
   pod 'Realm', '10.1.4', :modular_headers => true
+  custom_pods
 
   target 'MangaTests' do
     inherit! :search_paths

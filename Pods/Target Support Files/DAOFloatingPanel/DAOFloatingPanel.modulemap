@@ -1,0 +1,6 @@
+module DAOFloatingPanel {
+  umbrella header "DAOFloatingPanel-umbrella.h"
+
+  export *
+  module * { export * }
+}
