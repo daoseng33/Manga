@@ -8,15 +8,21 @@
 import UIKit
 import WebKit
 import RxSwift
+import DAOFloatingPanel
 
-class WebViewController: UIViewController {
+class WebViewController: DAOFloatingPanelViewController {
   // MARK: - Properties
   private let disposeBag = DisposeBag()
   
   // MARK: - UI
-  private let webView = WKWebView()
+  private let webView: WKWebView = {
+    let webView = WKWebView()
+    webView.translatesAutoresizingMaskIntoConstraints = false
+    
+    return webView
+  }()
   
-  lazy var progressView: UIProgressView = {
+  private lazy var progressView: UIProgressView = {
     let progressView = UIProgressView()
     progressView.trackTintColor = .clear
     progressView.progressTintColor = .orange
@@ -27,9 +33,10 @@ class WebViewController: UIViewController {
   
   // MARK: - Init
   init(urlString: String) {
-    super.init(nibName: nil, bundle: nil)
+    super.init(type: .normal)
     
     webView.load(urlString)
+    delegate = self
   }
   
   required init?(coder: NSCoder) {
@@ -37,28 +44,14 @@ class WebViewController: UIViewController {
   }
   
   // MARK: - View lifecycle
-  override func loadView() {
-    self.view = webView
-  }
-  
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    setupUI()
     setupObservable()
+    setupContentScrollView(scrollView: webView.scrollView)
   }
   
   // MARK: - Setup
-  private func setupUI() {
-    view.addSubview(progressView)
-    NSLayoutConstraint.activate([
-      progressView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      progressView.topAnchor.constraint(equalTo: view.topAnchor),
-      progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      progressView.heightAnchor.constraint(equalToConstant: 2)
-    ])
-  }
-  
   private func setupObservable() {
     // Progress view
     webView.rx.observe(Double.self, #keyPath(WKWebView.estimatedProgress))
@@ -74,6 +67,29 @@ class WebViewController: UIViewController {
             self.progressView.alpha = 0.0
           }, completion: nil)
         }
-      }).disposed(by: disposeBag)
+      })
+      .disposed(by: disposeBag)
+  }
+}
+
+// MARK: - FloatingPanelDelegate
+extension WebViewController: FloatingPanelDelegate {
+  func setupFloatingPanelContentUI(panel: DAOFloatingPanelViewController) {
+    contentView.addSubview(webView)
+    webView.addSubview(progressView)
+    
+    NSLayoutConstraint.activate([
+      webView.topAnchor.constraint(equalTo: contentView.topAnchor),
+      webView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+      webView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+      webView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+    ])
+    
+    NSLayoutConstraint.activate([
+      progressView.leadingAnchor.constraint(equalTo: webView.leadingAnchor),
+      progressView.topAnchor.constraint(equalTo: webView.topAnchor),
+      progressView.trailingAnchor.constraint(equalTo: webView.trailingAnchor),
+      progressView.heightAnchor.constraint(equalToConstant: 2)
+    ])
   }
 }
