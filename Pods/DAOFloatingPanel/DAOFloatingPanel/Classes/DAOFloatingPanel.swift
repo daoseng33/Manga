@@ -39,7 +39,9 @@ open class DAOFloatingPanelViewController: UIViewController {
   // MARK: - Properties
   // Public
   public weak var delegate: FloatingPanelDelegate?
+  
   public var enableHapticFeedback = true
+  
   public private(set) var panelMode: FloatingPanelMode {
     didSet {
       if panelMode == .shrink {
@@ -49,8 +51,33 @@ open class DAOFloatingPanelViewController: UIViewController {
       }
     }
   }
+  
   public private(set) var scrollDirection = ScrollDirection.none
+  
   public lazy var maxHeight: CGFloat = UIScreen.main.bounds.size.height - topMarginToEdge - 50
+  
+  // Private
+  private let panelType: FloatingPanelType
+  
+  private var enablePanGesture = true {
+    didSet {
+      if enablePanGesture {
+        contentScrollView?.panGestureRecognizer.addTarget(self, action: #selector(handlePan(_:)))
+      } else {
+        contentScrollView?.panGestureRecognizer.removeTarget(self, action: #selector(handlePan(_:)))
+      }
+    }
+  }
+  
+  private var isPaning = false
+  
+  private var lastContentOffsetY: CGFloat = 0
+  
+  private var contentHeight: CGFloat = 0
+  
+  private lazy var shrinkContentHeight: CGFloat = {
+    return contentHeight * 0.6
+  }()
   
   private var topMarginToEdge: CGFloat {
     if #available(iOS 13.0, *) {
@@ -61,23 +88,7 @@ open class DAOFloatingPanelViewController: UIViewController {
     }
   }
   
-  // Private
-  private var panelType: FloatingPanelType
-  private var enablePanGesture = true {
-    didSet {
-      if enablePanGesture {
-        contentScrollView?.panGestureRecognizer.addTarget(self, action: #selector(handlePan(_:)))
-      } else {
-        contentScrollView?.panGestureRecognizer.removeTarget(self, action: #selector(handlePan(_:)))
-      }
-    }
-  }
-  private var isPaning = false
-  private var lastContentOffsetY: CGFloat = 0
-  private var contentHeight: CGFloat = 0
-  private lazy var shrinkContentHeight: CGFloat = {
-    return contentHeight * 0.6
-  }()
+  private var headerTitle: String?
   
   // MARK: - UI
   open lazy var maskView: UIView = {
@@ -114,15 +125,23 @@ open class DAOFloatingPanelViewController: UIViewController {
     return view
   }()
   
+  open lazy var headerView: DAOPanelHeader = {
+    let view = DAOPanelHeader(title: headerTitle)
+    view.translatesAutoresizingMaskIntoConstraints = false
+    
+    return view
+  }()
+  
   private lazy var contentViewHeightConstraint: NSLayoutConstraint = contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 1)
   private lazy var contentViewBottomConstraint: NSLayoutConstraint = contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
   
   private weak var contentScrollView: UIScrollView?
   
   // MARK: - Init
-  public init(type: FloatingPanelType = .normal) {
+  public init(type: FloatingPanelType = .normal, headerTitle: String? = nil) {
     panelType = type
     panelMode = type == .normal ? .extend : .shrink
+    self.headerTitle = headerTitle
     
     super.init(nibName: nil, bundle: nil)
     
@@ -179,6 +198,17 @@ open class DAOFloatingPanelViewController: UIViewController {
       panIndicator.bottomAnchor.constraint(equalTo: contentView.topAnchor, constant: -7),
       panIndicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
     ])
+    
+    if headerTitle != nil {
+      contentView.addSubview(headerView)
+      
+      NSLayoutConstraint.activate([
+        headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+        headerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+        headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        headerView.heightAnchor.constraint(equalToConstant: 40)
+      ])
+    }
     
     delegate?.setupFloatingPanelContentUI(panel: self)
     updateContentHeight(height: delegate?.setContentHeight())

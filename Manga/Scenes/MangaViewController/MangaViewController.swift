@@ -333,7 +333,7 @@ extension MangaViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let cellViewModel = viewModel.getCellViewModel(with: indexPath.row)
     if let urlString = cellViewModel.urlString {
-      let webVC = WebViewController(urlString: urlString)
+      let webVC = WebViewController(urlString: urlString, headerTitle: cellViewModel.titleRelay.value)
       self.present(webVC, animated: true, completion: nil)
     }
   }

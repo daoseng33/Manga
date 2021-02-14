@@ -32,8 +32,8 @@ class WebViewController: DAOFloatingPanelViewController {
   }()
   
   // MARK: - Init
-  init(urlString: String) {
-    super.init(type: .normal)
+  init(urlString: String, headerTitle: String?) {
+    super.init(type: .normal, headerTitle: headerTitle)
     
     webView.load(urlString)
     delegate = self
@@ -79,7 +79,7 @@ extension WebViewController: FloatingPanelDelegate {
     webView.addSubview(progressView)
     
     NSLayoutConstraint.activate([
-      webView.topAnchor.constraint(equalTo: contentView.topAnchor),
+      webView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
       webView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
       webView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
       webView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)

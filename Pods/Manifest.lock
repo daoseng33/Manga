@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (5.4.1)
-  - DAOFloatingPanel (0.3.0)
+  - DAOFloatingPanel (0.4.0)
   - Kingfisher (6.0.1)
   - MBProgressHUD (1.2.0)
   - Moya/Core (14.0.0):
@@ -60,7 +60,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
-  DAOFloatingPanel: e242360e106e950c5e2cff77ddae39f3fd6844f2
+  DAOFloatingPanel: 89fa49fcb2a3d1a77c3a116399f7f3970c59cb59
   Kingfisher: adde87a4f74f6a3845395769354efff593581740
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
