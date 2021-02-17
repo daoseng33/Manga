@@ -186,8 +186,8 @@
 		1C0B12A425769E00001CDAD6 /* TopTests */ = {
 			isa = PBXGroup;
 			children = (
-				1CF6B1692572888900B05612 /* TopItemCellViewModelTests.swift */,
 				1C0B12B725769EBD001CDAD6 /* MangaViewModelTests.swift */,
+				1CF6B1692572888900B05612 /* TopItemCellViewModelTests.swift */,
 			);
 			path = TopTests;
 			sourceTree = "<group>";
@@ -206,22 +206,23 @@
 		1C2DEE402577F36F004B2256 /* FavoriteItemViewController */ = {
 			isa = PBXGroup;
 			children = (
-				1C2DEE3B2577F36A004B2256 /* FavoriteItemViewController.swift */,
 				1C2DEE462577F395004B2256 /* FavoriteItemViewController.storyboard */,
+				1C2DEE3B2577F36A004B2256 /* FavoriteItemViewController.swift */,
 				1C2DEE412577F381004B2256 /* FavoriteItemViewModel.swift */,
 			);
 			path = FavoriteItemViewController;
 			sourceTree = "<group>";
 		};
-		1C4FA54B2573EA5000712008 /* Managers */ = {
+		1C4FA54B2573EA5000712008 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				1C0B12C22576A16A001CDAD6 /* Utility.swift */,
+				1CCB7BE825736461008AD0D3 /* WebService */,
+				1C15C703257541B90007D263 /* FavoriteItemService.swift */,
 				1CB0392B2573D3BF0019EB15 /* ProgressHUDProvider.swift */,
 				1C1FF73D2575409D00944BA2 /* RealmProvider.swift */,
-				1C15C703257541B90007D263 /* FavoriteItemService.swift */,
+				1C0B12C22576A16A001CDAD6 /* Utility.swift */,
 			);
-			path = Managers;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		1C4FA54F2573EA5700712008 /* Components */ = {
@@ -272,8 +273,8 @@
 			isa = PBXGroup;
 			children = (
 				1CF6B15B2572888900B05612 /* Assets.xcassets */,
-				1CF6B15D2572888900B05612 /* LaunchScreen.storyboard */,
 				1CF6B1602572888900B05612 /* Info.plist */,
+				1CF6B15D2572888900B05612 /* LaunchScreen.storyboard */,
 				1CB039302573D4F10019EB15 /* Manga-Bridging-Header.h */,
 			);
 			path = SupportingFiles;
@@ -282,8 +283,8 @@
 		1CCB7BD32572933D008AD0D3 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				1CCB7BD72572934F008AD0D3 /* MangaViewController */,
 				1C2DEE402577F36F004B2256 /* FavoriteItemViewController */,
+				1CCB7BD72572934F008AD0D3 /* MangaViewController */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -291,11 +292,11 @@
 		1CCB7BD72572934F008AD0D3 /* MangaViewController */ = {
 			isa = PBXGroup;
 			children = (
-				1CF6B1562572888800B05612 /* MangaViewController.swift */,
-				1CF6B1582572888800B05612 /* ManagaViewController.storyboard */,
-				1CF2D8A625738ECA005A52FE /* MangaViewModel.swift */,
 				1CB0385C2573B65A0019EB15 /* TopItemCell */,
 				1CB038652573B72E0019EB15 /* TopItemHeaderView */,
+				1CF6B1582572888800B05612 /* ManagaViewController.storyboard */,
+				1CF6B1562572888800B05612 /* MangaViewController.swift */,
+				1CF2D8A625738ECA005A52FE /* MangaViewModel.swift */,
 			);
 			path = MangaViewController;
 			sourceTree = "<group>";
@@ -332,14 +333,14 @@
 			isa = PBXGroup;
 			children = (
 				1C15C70825754A2A0007D263 /* Constant.swift */,
-				1CF2D87D25738089005A52FE /* MoyaProviderExtension.swift */,
 				1CF2D88C257384BD005A52FE /* JsonDecoderExtension.swift */,
-				1CB03804257397FA0019EB15 /* UIImageViewExtension.swift */,
+				1CF2D87D25738089005A52FE /* MoyaProviderExtension.swift */,
 				1CB0382F25739E590019EB15 /* ObservableTypeExtension.swift */,
+				1CB03804257397FA0019EB15 /* UIImageViewExtension.swift */,
 				1CB0386E2573B9B00019EB15 /* UITableViewExtension.swift */,
+				1C8456032577E3BD0017387F /* UIViewControllerExtension.swift */,
 				1CB038922573BFA70019EB15 /* UIViewExtension.swift */,
 				1C1FF6AF2575205900944BA2 /* WKWebViewExtension.swift */,
-				1C8456032577E3BD0017387F /* UIViewControllerExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -372,12 +373,12 @@
 		1CF6B1462572888800B05612 = {
 			isa = PBXGroup;
 			children = (
+				B914DA4D7C6243C230FF6BC7 /* Frameworks */,
 				1CF6B1512572888800B05612 /* Manga */,
 				1CF6B1682572888900B05612 /* MangaTests */,
 				1CF6B1732572888900B05612 /* MangaUITests */,
-				1CF6B1502572888800B05612 /* Products */,
 				4DA0B254739D5417577AF638 /* Pods */,
-				B914DA4D7C6243C230FF6BC7 /* Frameworks */,
+				1CF6B1502572888800B05612 /* Products */,
 				1C8949FC25741DFD00BD3678 /* Recovered References */,
 			);
 			sourceTree = "<group>";
@@ -399,11 +400,10 @@
 				1CF2D8B025738F34005A52FE /* Base */,
 				1C4FA54F2573EA5700712008 /* Components */,
 				1CF2D8822573808C005A52FE /* Extensions */,
-				1C4FA54B2573EA5000712008 /* Managers */,
 				1CF2D89F2573898A005A52FE /* Models */,
 				1CCB7BD32572933D008AD0D3 /* Scenes */,
+				1C4FA54B2573EA5000712008 /* Services */,
 				1CCB7BC625728F18008AD0D3 /* SupportingFiles */,
-				1CCB7BE825736461008AD0D3 /* WebService */,
 			);
 			path = Manga;
 			sourceTree = "<group>";
@@ -412,8 +412,8 @@
 			isa = PBXGroup;
 			children = (
 				1C0B129A25769DEB001CDAD6 /* ServiceTests */,
-				1C0B12A425769E00001CDAD6 /* TopTests */,
 				1C0B12902576969F001CDAD6 /* SupportingFiles */,
+				1C0B12A425769E00001CDAD6 /* TopTests */,
 				1C0B127B25768777001CDAD6 /* Mock.generated.swift */,
 			);
 			path = MangaTests;
@@ -422,8 +422,8 @@
 		1CF6B1732572888900B05612 /* MangaUITests */ = {
 			isa = PBXGroup;
 			children = (
-				1CF6B1742572888900B05612 /* MangaUITests.swift */,
 				1CF6B1762572888900B05612 /* Info.plist */,
+				1CF6B1742572888900B05612 /* MangaUITests.swift */,
 			);
 			path = MangaUITests;
 			sourceTree = "<group>";
@@ -431,10 +431,10 @@
 		4DA0B254739D5417577AF638 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				2BC218C1BE844BDF303A2589 /* Pods-Manga.debug.xcconfig */,
-				27A32D2260943192A84214E8 /* Pods-Manga.release.xcconfig */,
 				88C748285475E4E7C47E7F8E /* Pods-Manga-MangaUITests.debug.xcconfig */,
 				4E00C421F7F8F267C0DF5653 /* Pods-Manga-MangaUITests.release.xcconfig */,
+				2BC218C1BE844BDF303A2589 /* Pods-Manga.debug.xcconfig */,
+				27A32D2260943192A84214E8 /* Pods-Manga.release.xcconfig */,
 				C576677D6B42CBF29B2C0701 /* Pods-MangaTests.debug.xcconfig */,
 				FF53C0CD031DA87624B85D3F /* Pods-MangaTests.release.xcconfig */,
 			);
@@ -444,8 +444,8 @@
 		B914DA4D7C6243C230FF6BC7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				240469506BCD67C6E80CB22E /* libPods-Manga.a */,
 				02EE34F1F974A467D9469FD7 /* libPods-Manga-MangaUITests.a */,
+				240469506BCD67C6E80CB22E /* libPods-Manga.a */,
 				28FDED6AB97D71EF3CAD7F34 /* libPods-MangaTests.a */,
 			);
 			name = Frameworks;
@@ -558,16 +558,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1C0B12BD2576A0AF001CDAD6 /* top_anime_bypopularity.json in Resources */,
-				1CBB76FD257418EA00A5C858 /* TopItemTableViewCell.xib in Resources */,
-				1CB0386A2573B7600019EB15 /* TopItemHeaderView.xib in Resources */,
-				1C8455D42577C3620017387F /* top_anime_bypopularity_page_2.json in Resources */,
-				1C2DEE472577F395004B2256 /* FavoriteItemViewController.storyboard in Resources */,
-				1C8455DE2577D84E0017387F /* top_manga_bypopularity.json in Resources */,
-				1C8455D92577D14F0017387F /* top_anime_upcoming.json in Resources */,
-				1CF6B15F2572888900B05612 /* LaunchScreen.storyboard in Resources */,
 				1CF6B15C2572888900B05612 /* Assets.xcassets in Resources */,
+				1C2DEE472577F395004B2256 /* FavoriteItemViewController.storyboard in Resources */,
+				1CF6B15F2572888900B05612 /* LaunchScreen.storyboard in Resources */,
 				1CF6B15A2572888800B05612 /* ManagaViewController.storyboard in Resources */,
+				1C0B12BD2576A0AF001CDAD6 /* top_anime_bypopularity.json in Resources */,
+				1C8455D42577C3620017387F /* top_anime_bypopularity_page_2.json in Resources */,
+				1C8455D92577D14F0017387F /* top_anime_upcoming.json in Resources */,
+				1C8455DE2577D84E0017387F /* top_manga_bypopularity.json in Resources */,
+				1CB0386A2573B7600019EB15 /* TopItemHeaderView.xib in Resources */,
+				1CBB76FD257418EA00A5C858 /* TopItemTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -678,36 +678,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1CF2D8972573896B005A52FE /* TopList.swift in Sources */,
-				1C1FF6AB25751FF500944BA2 /* WebViewController.swift in Sources */,
-				1CF2D88D257384BD005A52FE /* JsonDecoderExtension.swift in Sources */,
-				1CF2D872257378CF005A52FE /* MangaWebService.swift in Sources */,
-				1CCB7BE42573619E008AD0D3 /* MangaTargetType.swift in Sources */,
-				1CB0392C2573D3BF0019EB15 /* ProgressHUDProvider.swift in Sources */,
-				1C1FF6B02575205900944BA2 /* WKWebViewExtension.swift in Sources */,
-				1C2DEE422577F381004B2256 /* FavoriteItemViewModel.swift in Sources */,
-				1CCB7BDC257293F1008AD0D3 /* TopListAPI.swift in Sources */,
-				1CF2D892257388D8005A52FE /* TopItem.swift in Sources */,
-				1C15C704257541B90007D263 /* FavoriteItemService.swift in Sources */,
-				1C8456212577EBD70017387F /* RealmProvider.swift in Sources */,
-				1CF2D86D257369F1005A52FE /* TopListWebService.swift in Sources */,
-				1C8456042577E3BD0017387F /* UIViewControllerExtension.swift in Sources */,
-				1CF2D8AC25738F14005A52FE /* BaseViewModel.swift in Sources */,
-				1CB03805257397FA0019EB15 /* UIImageViewExtension.swift in Sources */,
-				1CB038612573B7250019EB15 /* TopItemHeaderView.swift in Sources */,
-				1C8949FE25741E8F00BD3678 /* TopItemCellViewModel.swift in Sources */,
-				1CF2D87E25738089005A52FE /* MoyaProviderExtension.swift in Sources */,
-				1CF6B1572572888800B05612 /* MangaViewController.swift in Sources */,
-				1CB038932573BFA70019EB15 /* UIViewExtension.swift in Sources */,
-				1C2DEE3C2577F36A004B2256 /* FavoriteItemViewController.swift in Sources */,
 				1CF6B1532572888800B05612 /* AppDelegate.swift in Sources */,
+				1CF2D8AC25738F14005A52FE /* BaseViewModel.swift in Sources */,
 				1C15C70925754A2A0007D263 /* Constant.swift in Sources */,
-				1C0B12C32576A16A001CDAD6 /* Utility.swift in Sources */,
-				1CB0383025739E590019EB15 /* ObservableTypeExtension.swift in Sources */,
-				1C1FF7452575416900944BA2 /* TopItemTableViewCell.swift in Sources */,
-				1CB0386F2573B9B00019EB15 /* UITableViewExtension.swift in Sources */,
-				1CF6B1552572888800B05612 /* SceneDelegate.swift in Sources */,
+				1C15C704257541B90007D263 /* FavoriteItemService.swift in Sources */,
+				1C2DEE3C2577F36A004B2256 /* FavoriteItemViewController.swift in Sources */,
+				1C2DEE422577F381004B2256 /* FavoriteItemViewModel.swift in Sources */,
+				1CF2D88D257384BD005A52FE /* JsonDecoderExtension.swift in Sources */,
+				1CCB7BE42573619E008AD0D3 /* MangaTargetType.swift in Sources */,
+				1CF6B1572572888800B05612 /* MangaViewController.swift in Sources */,
 				1CF2D8A725738ECA005A52FE /* MangaViewModel.swift in Sources */,
+				1CF2D872257378CF005A52FE /* MangaWebService.swift in Sources */,
+				1CF2D87E25738089005A52FE /* MoyaProviderExtension.swift in Sources */,
+				1CB0383025739E590019EB15 /* ObservableTypeExtension.swift in Sources */,
+				1CB0392C2573D3BF0019EB15 /* ProgressHUDProvider.swift in Sources */,
+				1C8456212577EBD70017387F /* RealmProvider.swift in Sources */,
+				1CF6B1552572888800B05612 /* SceneDelegate.swift in Sources */,
+				1CF2D892257388D8005A52FE /* TopItem.swift in Sources */,
+				1C8949FE25741E8F00BD3678 /* TopItemCellViewModel.swift in Sources */,
+				1CB038612573B7250019EB15 /* TopItemHeaderView.swift in Sources */,
+				1C1FF7452575416900944BA2 /* TopItemTableViewCell.swift in Sources */,
+				1CF2D8972573896B005A52FE /* TopList.swift in Sources */,
+				1CCB7BDC257293F1008AD0D3 /* TopListAPI.swift in Sources */,
+				1CF2D86D257369F1005A52FE /* TopListWebService.swift in Sources */,
+				1CB03805257397FA0019EB15 /* UIImageViewExtension.swift in Sources */,
+				1CB0386F2573B9B00019EB15 /* UITableViewExtension.swift in Sources */,
+				1C8456042577E3BD0017387F /* UIViewControllerExtension.swift in Sources */,
+				1CB038932573BFA70019EB15 /* UIViewExtension.swift in Sources */,
+				1C0B12C32576A16A001CDAD6 /* Utility.swift in Sources */,
+				1C1FF6AB25751FF500944BA2 /* WebViewController.swift in Sources */,
+				1C1FF6B02575205900944BA2 /* WKWebViewExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -715,10 +715,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1C0B127C25768777001CDAD6 /* Mock.generated.swift in Sources */,
-				1CF6B16A2572888900B05612 /* TopItemCellViewModelTests.swift in Sources */,
 				1C0B12892576954B001CDAD6 /* FavoriteItemServiceTests.swift in Sources */,
 				1C0B12B825769EBD001CDAD6 /* MangaViewModelTests.swift in Sources */,
+				1C0B127C25768777001CDAD6 /* Mock.generated.swift in Sources */,
+				1CF6B16A2572888900B05612 /* TopItemCellViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

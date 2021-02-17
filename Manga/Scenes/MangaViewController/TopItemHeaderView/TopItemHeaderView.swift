@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TopItemHeaderView: UIView {
+final class TopItemHeaderView: UIView {
   @IBOutlet weak var typeTextField: UITextField!
   @IBOutlet weak var subtypeTextField: UITextField!
   @IBOutlet weak var selectedTypeLabel: UILabel!

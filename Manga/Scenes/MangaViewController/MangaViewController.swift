@@ -10,20 +10,10 @@ import RxSwift
 import RxGesture
 import RxRelay
 
-class MangaViewController: UIViewController {
+final class MangaViewController: UIViewController {
   // MARK: - Properties
   private let viewModel = MangaViewModel()
   private let disposeBag = DisposeBag()
-  private let footerHeightRelay = BehaviorRelay<CGFloat>(value: 44)
-  private var footerHeight: CGFloat {
-    return footerHeightRelay.value
-  }
-  
-  // Picker selected state
-  let selectedPickerIndexRelay = BehaviorRelay<(typeIndex: Int, subtypeIndex: Int)>(value: (0, 0))
-  var selectedPickerIndex: (typeIndex: Int, subtypeIndex: Int) {
-    return selectedPickerIndexRelay.value
-  }
   
   // MARK: - UI
   @IBOutlet weak var topListTableView: UITableView! {
@@ -67,7 +57,7 @@ class MangaViewController: UIViewController {
     return close
   }()
   
-  lazy var loadMoreIndicatorView: UIActivityIndicatorView = {
+  private lazy var loadMoreIndicatorView: UIActivityIndicatorView = {
     let view = UIActivityIndicatorView()
     view.startAnimating()
     
@@ -96,8 +86,7 @@ class MangaViewController: UIViewController {
   }
   
   private func setupObservable() {
-    viewModel.selectedTypeRelay
-      .asDriver()
+    viewModel.selectedTypeDriver
       .drive(onNext: { [weak self] selectedType in
         guard let self = self else { return }
         self.fetchTopList(shouldShowHud: true, shouldReset: true)
@@ -116,38 +105,9 @@ class MangaViewController: UIViewController {
           topListTableView.insertRows(with: pre, cur: cur)
         }
       })
-      .disposed(by: viewModel.disposeBag)
-    
-    selectedPickerIndexRelay
-      .skip(1)
-      .distinctUntilChanged { (pre, cur) -> Bool in
-        return pre.typeIndex == cur.typeIndex && pre.subtypeIndex == cur.subtypeIndex
-      }
-      .map { (typeIndex, subtypeIndex) -> TopListAPIType in
-        let type = TopListType.allCases[typeIndex]
-        switch type {
-        case .anime:
-          let subType = AnimateSubtype.allCases[subtypeIndex]
-          return .anime(subType: subType)
-          
-        case .manga:
-          let subType = MangaSubtype.allCases[subtypeIndex]
-          return .manga(subType: subType)
-        }
-      }
-      .bind(to: viewModel.selectedTypeRelay)
-      .disposed(by: viewModel.disposeBag)
-    
-    viewModel.loadingStateRelay
-      .map({ (loadingState) -> CGFloat in
-        return loadingState == .loadEnd ? 0 : 44
-      })
-      .asDriver(onErrorJustReturn: 0)
-      .drive(footerHeightRelay)
       .disposed(by: disposeBag)
     
-    footerHeightRelay
-      .asDriver()
+    viewModel.footerHeightDriver
       .skip(1)
       .drive(onNext: { [weak self] _ in
         guard let self = self else { return }
@@ -163,7 +123,7 @@ class MangaViewController: UIViewController {
       .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
         let typeIndex = self.typePickerView.selectedRow(inComponent: 0)
-        self.selectedPickerIndexRelay.accept((typeIndex, 0))
+        self.viewModel.selectedPickerIndexRelay.accept((typeIndex, 0))
         self.view.endEditing(true)
       })
       .disposed(by: disposeBag)
@@ -172,7 +132,7 @@ class MangaViewController: UIViewController {
       .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
         let subtypeIndex = self.subtypePickerView.selectedRow(inComponent: 0)
-        self.selectedPickerIndexRelay.accept((self.selectedPickerIndex.typeIndex, subtypeIndex))
+        self.viewModel.selectedPickerIndexRelay.accept((self.viewModel.selectedPickerIndex.typeIndex, subtypeIndex))
         self.view.endEditing(true)
       })
       .disposed(by: disposeBag)
@@ -246,7 +206,7 @@ extension MangaViewController: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cellViewModel = viewModel.getCellViewModel(with: indexPath.row)
+    let cellViewModel = viewModel.topItemCellViewModels[indexPath.row]
     let cell = tableView.dequeueReusableCell(with: TopItemTableViewCell.self, for: indexPath)
     cell.configure(cellViewModel: cellViewModel)
     
@@ -282,19 +242,17 @@ extension MangaViewController: UITableViewDelegate {
     // Setup picker view row by selected index
     view.typeTextField.rx
       .controlEvent(.editingDidBegin)
-      .asDriver()
-      .drive(onNext: { [weak self] in
+      .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
-        self.typePickerView.selectRow(self.selectedPickerIndex.typeIndex, inComponent: 0, animated: false)
+        self.typePickerView.selectRow(self.viewModel.selectedPickerIndex.typeIndex, inComponent: 0, animated: false)
       })
       .disposed(by: disposeBag)
     
     view.subtypeTextField.rx
       .controlEvent(.editingDidBegin)
-      .asDriver()
-      .drive(onNext: { [weak self] in
+      .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
-        self.subtypePickerView.selectRow(self.selectedPickerIndex.subtypeIndex, inComponent: 0, animated: false)
+        self.subtypePickerView.selectRow(self.viewModel.selectedPickerIndex.subtypeIndex, inComponent: 0, animated: false)
       })
       .disposed(by: disposeBag)
     
@@ -302,20 +260,18 @@ extension MangaViewController: UITableViewDelegate {
       .tap
       .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
-        let favoriteVC = FavoriteItemViewController.storyboardInstance()
+        let favoriteVC = FavoriteItemViewController.storyboardInstance
         favoriteVC.delegate = self
         self.present(favoriteVC, animated: true, completion: nil)
       })
       .disposed(by: disposeBag)
     
     // Data binding
-    viewModel.selectedTypeTitleRelay
-      .asDriver()
+    viewModel.selectedTypeTitleDriver
       .drive(view.selectedTypeLabel.rx.text)
       .disposed(by: viewModel.disposeBag)
     
-    viewModel.selectedSubtypeTitleRelay
-      .asDriver()
+    viewModel.selectedSubtypeTitleDriver
       .drive(view.selectedSubtypeLabel.rx.text)
       .disposed(by: viewModel.disposeBag)
     
@@ -323,7 +279,7 @@ extension MangaViewController: UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-    return footerHeight
+    return viewModel.footerHeight
   }
   
   func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -331,9 +287,9 @@ extension MangaViewController: UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let cellViewModel = viewModel.getCellViewModel(with: indexPath.row)
+    let cellViewModel = viewModel.topItemCellViewModels[indexPath.row]
     if let urlString = cellViewModel.urlString {
-      let webVC = WebViewController(urlString: urlString, headerTitle: cellViewModel.titleRelay.value)
+      let webVC = WebViewController(urlString: urlString, headerTitle: cellViewModel.title)
       self.present(webVC, animated: true, completion: nil)
     }
   }
@@ -365,10 +321,10 @@ extension MangaViewController: UIPickerViewDelegate {
   func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
     switch pickerView {
     case typePickerView:
-      return viewModel.getTypeString(with: row)
+      return viewModel.typeStrings[row]
       
     case subtypePickerView:
-      return viewModel.getSubtypeString(with: row)
+      return viewModel.subtypeStrings[row]
       
     default:
       assertionFailure("Unknown picker")

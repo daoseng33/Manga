@@ -6,16 +6,19 @@
 //
 
 import Foundation
-import RxRelay
+import RxCocoa
 
-class FavoriteItemViewModel: BaseViewModel {
+final class FavoriteItemViewModel: BaseViewModel {
   // MARK: - Properties
-  let realm = RealmProvider.favoriteItem.realm
+  var shouldReloadData = false
+  private let realm = RealmProvider.favoriteItem.realm
+  
   // top item cell view models
-  let topItemCellViewModelsRelay: BehaviorRelay<[TopItemCellViewModel]>
+  lazy var topItemCellViewModelsDriver: Driver<[TopItemCellViewModel]> = topItemCellViewModelsRelay.asDriver()
   var topItemCellViewModels: [TopItemCellViewModel] {
     return topItemCellViewModelsRelay.value
   }
+  private let topItemCellViewModelsRelay: BehaviorRelay<[TopItemCellViewModel]>
   
   // MARK: - Init
   override init() {
@@ -30,10 +33,5 @@ class FavoriteItemViewModel: BaseViewModel {
     topItemCellViewModelsRelay = BehaviorRelay<[TopItemCellViewModel]>(value: cellViewModels)
     
     super.init()
-  }
-  
-  // MARK: - Getter
-  func getCellViewModel(with index: Int) -> TopItemCellViewModel {
-    return topItemCellViewModels[index]
   }
 }

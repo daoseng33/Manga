@@ -6,18 +6,40 @@
 //
 
 import Foundation
-import RxRelay
+import RxCocoa
 import RxSwift
 
-class TopItemCellViewModel: BaseViewModel {
+final class TopItemCellViewModel: BaseViewModel {
   let favoriteItemService: FavoriteItemServiceProtocol
   let topItem: TopItem
-  let imageUrlRelay: BehaviorRelay<URL>
-  let titleRelay: BehaviorRelay<String>
-  let rankRelay: BehaviorRelay<String>
-  let typeRelay: BehaviorRelay<String>
-  let startDateRelay: BehaviorRelay<String>
-  let endDateRelay: BehaviorRelay<String>
+  
+  // image url
+  lazy var imageUrlDriver = imageUrlRelay.asDriver()
+  private let imageUrlRelay: BehaviorRelay<URL>
+  
+  // title
+  lazy var titleDriver = titleRelay.asDriver()
+  var title: String {
+    return titleRelay.value
+  }
+  private let titleRelay: BehaviorRelay<String>
+  
+  // rank
+  lazy var rankDriver = rankRelay.asDriver()
+  private let rankRelay: BehaviorRelay<String>
+  
+  // type
+  lazy var typeDriver = typeRelay.asDriver()
+  private let typeRelay: BehaviorRelay<String>
+  
+  // start date
+  lazy var startDateDriver = startDateRelay.asDriver()
+  private let startDateRelay: BehaviorRelay<String>
+  
+  // end date
+  lazy var endDateDriver = endDateRelay.asDriver()
+  private let endDateRelay: BehaviorRelay<String>
+  
   var isFavorite: Bool {
     return favoriteItemService.isItemLike(with: topItem.malId)
   }

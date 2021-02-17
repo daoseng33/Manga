@@ -12,18 +12,19 @@ protocol FavoriteItemViewControllerDelegate: AnyObject {
   func shouldReloadData()
 }
 
-class FavoriteItemViewController: UIViewController {
-  weak var delegate: FavoriteItemViewControllerDelegate?
-  let viewModel = FavoriteItemViewModel()
-  private let disposeBag = DisposeBag()
-  private var shouldReloadData = false
-  
-  static func storyboardInstance() -> FavoriteItemViewController {
+final class FavoriteItemViewController: UIViewController {
+  static let storyboardInstance: FavoriteItemViewController = {
     let storyboard = UIStoryboard(name: String(describing: FavoriteItemViewController.self), bundle: nil)
     let vc = storyboard.instantiateInitialViewController() as! FavoriteItemViewController
     
     return vc
-  }
+  }()
+  
+  weak var delegate: FavoriteItemViewControllerDelegate?
+  
+  // Private
+  private let viewModel = FavoriteItemViewModel()
+  private let disposeBag = DisposeBag()
   
   // MARK: - UI
   @IBOutlet weak var topListTableView: UITableView! {
@@ -42,15 +43,14 @@ class FavoriteItemViewController: UIViewController {
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
     
-    if shouldReloadData {
+    if viewModel.shouldReloadData {
       delegate?.shouldReloadData()
     }
   }
   
   // MARK: - Setup
   private func setupObservable() {
-    viewModel.topItemCellViewModelsRelay
-      .asDriver()
+    viewModel.topItemCellViewModelsDriver
       .drive(onNext: { [weak self] _ in
         guard let self = self else { return }
         self.topListTableView.reloadData()
@@ -66,14 +66,14 @@ extension FavoriteItemViewController: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cellViewModel = viewModel.getCellViewModel(with: indexPath.row)
+    let cellViewModel = viewModel.topItemCellViewModels[indexPath.row]
     let cell = tableView.dequeueReusableCell(with: TopItemTableViewCell.self, for: indexPath)
     cell.configure(cellViewModel: cellViewModel)
     cellViewModel.handleListTappedSubject
       .observeOn(MainScheduler.instance)
       .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
-        self.shouldReloadData = true
+        self.viewModel.shouldReloadData = true
         tableView.reloadRows(at: [indexPath], with: .none)
       })
       .disposed(by: cellViewModel.disposeBag)

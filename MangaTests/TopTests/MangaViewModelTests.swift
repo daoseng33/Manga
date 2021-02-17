@@ -30,8 +30,9 @@ class MangaViewModelTests: XCTestCase {
     try super.tearDownWithError()
   }
   
-  func testMangaViewModel_whenInitialize_checkSelectedType() {
-    if case TopListAPIType.anime(subType: .bypopularity) = sut.selectedType {
+  func testMangaViewModel_whenInitialize_checkSelectedType() throws {
+    guard let selectedType = try sut.selectedTypeDriver.toBlocking().first() else { XCTFail(); return }
+    if case TopListAPIType.anime(subType: .bypopularity) = selectedType {
       XCTAssert(true)
     } else {
       XCTFail("Wrong selected type when init.")
@@ -69,7 +70,7 @@ class MangaViewModelTests: XCTestCase {
     
     switch result {
     case .completed:
-      let firstCellViewModel = sut.getCellViewModel(with: 0)
+      let firstCellViewModel = sut.topItemCellViewModels[0]
       // First id should be 1535
       XCTAssertEqual(firstCellViewModel.topItem.malId, 1535)
       
@@ -83,9 +84,9 @@ class MangaViewModelTests: XCTestCase {
     
     switch result {
     case .completed:
-      let firstCellViewModel = sut.getCellViewModel(with: 0)
+      let firstCellViewModel = sut.topItemCellViewModels[0]
       // First title should be "Death Note"
-      XCTAssertEqual(firstCellViewModel.titleRelay.value, "Death Note")
+      XCTAssertEqual(firstCellViewModel.title, "Death Note")
       
     case .failed(_, let error):
       XCTFail(error.localizedDescription)
@@ -97,7 +98,7 @@ class MangaViewModelTests: XCTestCase {
     
     switch result {
     case .completed:
-      let firstCellViewModel = sut.getCellViewModel(with: 49)
+      let firstCellViewModel = sut.topItemCellViewModels[49]
       // Last id should be 28171
       XCTAssertEqual(firstCellViewModel.topItem.malId, 28171)
       
@@ -111,9 +112,9 @@ class MangaViewModelTests: XCTestCase {
     
     switch result {
     case .completed:
-      let firstCellViewModel = sut.getCellViewModel(with: 49)
+      let firstCellViewModel = sut.topItemCellViewModels[49]
       // Last title should be "Shokugeki no Souma"
-      XCTAssertEqual(firstCellViewModel.titleRelay.value, "Shokugeki no Souma")
+      XCTAssertEqual(firstCellViewModel.title, "Shokugeki no Souma")
       
     case .failed(_, let error):
       XCTFail(error.localizedDescription)
@@ -126,7 +127,7 @@ class MangaViewModelTests: XCTestCase {
     switch result {
     case .completed:
       // Selected type title should be "anime"
-      XCTAssertEqual(sut.selectedTypeTitle, "anime")
+      XCTAssertEqual(try sut.selectedTypeTitleDriver.toBlocking().first(), "anime")
       
     case .failed(_, let error):
       XCTFail(error.localizedDescription)
@@ -139,7 +140,7 @@ class MangaViewModelTests: XCTestCase {
     switch result {
     case .completed:
       // Selected subtype title should be "bypopularity"
-      XCTAssertEqual(sut.selectedSubTypeTitle, "bypopularity")
+      XCTAssertEqual(try sut.selectedSubtypeTitleDriver.toBlocking().first(), "bypopularity")
       
     case .failed(_, let error):
       XCTFail(error.localizedDescription)
@@ -196,8 +197,8 @@ class MangaViewModelTests: XCTestCase {
     let result = sut.loadMoreData(with: 49).toBlocking().materialize()
     switch result {
     case .completed:
-      let cellViewModel = sut.getCellViewModel(with: 98)
-      XCTAssertEqual(cellViewModel.titleRelay.value, "Ouran Koukou Host Club")
+      let cellViewModel = sut.topItemCellViewModels[98]
+      XCTAssertEqual(cellViewModel.title, "Ouran Koukou Host Club")
       
     case .failed(_, let error):
       XCTFail(error.localizedDescription)
@@ -243,35 +244,33 @@ class MangaViewModelTests: XCTestCase {
   func testMangaViewModel_whenSelectDifferentSubtype_checkFirstCellTitle() throws {
     // Load first pack of data
     _ = sut.fetchTopList().toBlocking().materialize()
-    let firstCellViewModel = sut.getCellViewModel(with: 0)
+    let firstCellViewModel = sut.topItemCellViewModels[0]
     // First title should be "Death Note"
-    XCTAssertEqual(firstCellViewModel.titleRelay.value, "Death Note")
+    XCTAssertEqual(firstCellViewModel.title, "Death Note")
     
     // Realod data with subtype "upcoming"
-    let upcoming = TopListAPIType.anime(subType: .upcoming)
-    sut.selectedTypeRelay.accept(upcoming)
-    let _ = try sut.selectedTypeRelay.toBlocking(timeout: 1.0).first()
+    sut.selectedPickerIndexRelay.accept((0, 3))
+    let _ = try sut.selectedTypeDriver.toBlocking(timeout: 1.0).first()
     let _ = sut.fetchTopList(shouldReset: true).toBlocking().materialize()
     
-    let upcomingFirstCellViewModel = sut.getCellViewModel(with: 0)
+    let upcomingFirstCellViewModel = sut.topItemCellViewModels[0]
     // First title should be "Shingeki no Kyojin: The Final Season"
-    XCTAssertEqual(upcomingFirstCellViewModel.titleRelay.value, "Shingeki no Kyojin: The Final Season")
+    XCTAssertEqual(upcomingFirstCellViewModel.title, "Shingeki no Kyojin: The Final Season")
   }
   
   func testMangaViewModel_whenSelectDifferentSubtype_checkFirstItemId() throws {
     // Load first pack of data
     _ = sut.fetchTopList().toBlocking().materialize()
-    let firstCellViewModel = sut.getCellViewModel(with: 0)
+    let firstCellViewModel = sut.topItemCellViewModels[0]
     // First id should be 1535
     XCTAssertEqual(firstCellViewModel.topItem.malId, 1535)
     
     // Realod data with subtype "upcoming"
-    let upcoming = TopListAPIType.anime(subType: .upcoming)
-    sut.selectedTypeRelay.accept(upcoming)
-    let _ = try sut.selectedTypeRelay.toBlocking(timeout: 1.0).first()
+    sut.selectedPickerIndexRelay.accept((0, 3))
+    let _ = try sut.selectedTypeDriver.toBlocking(timeout: 1.0).first()
     let _ = sut.fetchTopList(shouldReset: true).toBlocking().materialize()
     
-    let upcomingFirstCellViewModel = sut.getCellViewModel(with: 0)
+    let upcomingFirstCellViewModel = sut.topItemCellViewModels[0]
     // First id should be 40028
     XCTAssertEqual(upcomingFirstCellViewModel.topItem.malId, 40028)
   }
@@ -279,35 +278,33 @@ class MangaViewModelTests: XCTestCase {
   func testMangaViewModel_whenSelectDifferentType_checkFirstCellTitle() throws {
     // Load first pack of data
     _ = sut.fetchTopList().toBlocking().materialize()
-    let firstCellViewModel = sut.getCellViewModel(with: 0)
+    let firstCellViewModel = sut.topItemCellViewModels[0]
     // First title should be "Death Note"
-    XCTAssertEqual(firstCellViewModel.titleRelay.value, "Death Note")
+    XCTAssertEqual(firstCellViewModel.title, "Death Note")
     
     // Realod data with type "manga"
-    let manga = TopListAPIType.manga(subType: .bypopularity)
-    sut.selectedTypeRelay.accept(manga)
-    let _ = try sut.selectedTypeRelay.toBlocking(timeout: 1.0).first()
+    sut.selectedPickerIndexRelay.accept((1, 0))
+    let _ = try sut.selectedTypeDriver.toBlocking(timeout: 1.0).first()
     let _ = sut.fetchTopList(shouldReset: true).toBlocking().materialize()
     
-    let upcomingFirstCellViewModel = sut.getCellViewModel(with: 0)
+    let upcomingFirstCellViewModel = sut.topItemCellViewModels[0]
     // First title should be "Shingeki no Kyojin: The Final Season"
-    XCTAssertEqual(upcomingFirstCellViewModel.titleRelay.value, "Shingeki no Kyojin")
+    XCTAssertEqual(upcomingFirstCellViewModel.title, "Shingeki no Kyojin")
   }
   
   func testMangaViewModel_whenSelectDifferentType_checkFirstItemId() throws {
     // Load first pack of data
     _ = sut.fetchTopList().toBlocking().materialize()
-    let firstCellViewModel = sut.getCellViewModel(with: 0)
+    let firstCellViewModel = sut.topItemCellViewModels[0]
     // First id should be 1535
     XCTAssertEqual(firstCellViewModel.topItem.malId, 1535)
     
     // Realod data with type "manga"
-    let manga = TopListAPIType.manga(subType: .bypopularity)
-    sut.selectedTypeRelay.accept(manga)
-    let _ = try sut.selectedTypeRelay.toBlocking(timeout: 1.0).first()
+    sut.selectedPickerIndexRelay.accept((1, 0))
+    let _ = try sut.selectedTypeDriver.toBlocking(timeout: 1.0).first()
     let _ = sut.fetchTopList(shouldReset: true).toBlocking().materialize()
     
-    let upcomingFirstCellViewModel = sut.getCellViewModel(with: 0)
+    let upcomingFirstCellViewModel = sut.topItemCellViewModels[0]
     // First id should be 23390
     XCTAssertEqual(upcomingFirstCellViewModel.topItem.malId, 23390)
   }

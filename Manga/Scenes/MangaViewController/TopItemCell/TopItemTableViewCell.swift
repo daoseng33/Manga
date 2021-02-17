@@ -13,7 +13,7 @@ protocol TopItemTableViewCellDelegate: AnyObject {
   func handleTappedLikeButton(with Id: Int)
 }
 
-class TopItemTableViewCell: UITableViewCell {
+final class TopItemTableViewCell: UITableViewCell {
   // MARK: - Properties
   var disposeBag = DisposeBag()
   weak var delegate: TopItemTableViewCellDelegate?
@@ -42,36 +42,30 @@ class TopItemTableViewCell: UITableViewCell {
   
   // MARK: - Configure
   func configure(cellViewModel: TopItemCellViewModel) {
-    cellViewModel.imageUrlRelay
-      .asDriver()
+    cellViewModel.imageUrlDriver
       .drive(onNext: { [weak self] url in
         guard let self = self else { return }
         self.mangaImageView.setImage(with: url)
       })
       .disposed(by: disposeBag)
     
-    cellViewModel.titleRelay
-      .asDriver()
+    cellViewModel.titleDriver
       .drive(mangaTitleLabel.rx.text)
       .disposed(by: disposeBag)
 
-    cellViewModel.rankRelay
-      .asDriver()
+    cellViewModel.rankDriver
       .drive(mangaRankLabel.rx.text)
       .disposed(by: disposeBag)
 
-    cellViewModel.typeRelay
-      .asDriver()
+    cellViewModel.typeDriver
       .drive(mangaTypeLabel.rx.text)
       .disposed(by: disposeBag)
 
-    cellViewModel.startDateRelay
-      .asDriver()
+    cellViewModel.startDateDriver
       .drive(mangaStartDateLabel.rx.text)
       .disposed(by: disposeBag)
 
-    cellViewModel.endDateRelay
-      .asDriver()
+    cellViewModel.endDateDriver
       .drive(mangaEndDateLabel.rx.text)
       .disposed(by: disposeBag)
     

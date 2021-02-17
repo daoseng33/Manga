@@ -7,15 +7,15 @@
 
 import Foundation
 import RxSwift
-import RxRelay
+import RxCocoa
 
-class MangaViewModel: BaseViewModel {
+final class MangaViewModel: BaseViewModel {
   // MARK: - Properties
+  var shouldResetData: Bool = false
+  
   private let webService: TopListWebServiceProtocol
   private let itemsPerPage: Int = 50
   private var nextPage: Int = 1
-  
-  var shouldResetData: Bool = false
   
   // top item cell view models
   let topItemCellViewModelsRelay = BehaviorRelay<[TopItemCellViewModel]>(value: [])
@@ -24,33 +24,44 @@ class MangaViewModel: BaseViewModel {
   }
   
   // selected type
-  let selectedTypeRelay = BehaviorRelay<TopListAPIType>(value: .anime(subType: .bypopularity))
-  var selectedType: TopListAPIType {
+  lazy var selectedTypeDriver: Driver<TopListAPIType> = selectedTypeRelay.asDriver()
+  private let selectedTypeRelay = BehaviorRelay<TopListAPIType>(value: .anime(subType: .bypopularity))
+  private var selectedType: TopListAPIType {
     return selectedTypeRelay.value
   }
   
   // type string for selected type label
-  let selectedTypeTitleRelay = BehaviorRelay<String>(value: "-")
-  var selectedTypeTitle: String {
-    return selectedTypeTitleRelay.value
-  }
+  lazy var selectedTypeTitleDriver: Driver<String> = selectedTypeTitleRelay.asDriver()
+  private let selectedTypeTitleRelay = BehaviorRelay<String>(value: "-")
   
-  let selectedSubtypeTitleRelay = BehaviorRelay<String>(value: "-")
-  var selectedSubTypeTitle: String {
-    return selectedSubtypeTitleRelay.value
-  }
+  // subtype string for selected subtype label
+  lazy var selectedSubtypeTitleDriver: Driver<String> = selectedSubtypeTitleRelay.asDriver()
+  private let selectedSubtypeTitleRelay = BehaviorRelay<String>(value: "-")
   
   // type strings for type picker
-  private let typeStringsRelay = BehaviorRelay<[String]>(value: TopListType.allCases.map { $0.rawValue })
   var typeStrings: [String] {
     return typeStringsRelay.value
   }
+  private let typeStringsRelay = BehaviorRelay<[String]>(value: TopListType.allCases.map { $0.rawValue })
   
   // subtype strings for subtype picker
-  private let subtypeStringsRelay = BehaviorRelay<[String]>(value: [])
   var subtypeStrings: [String] {
     return subtypeStringsRelay.value
   }
+  private let subtypeStringsRelay = BehaviorRelay<[String]>(value: [])
+  
+  // Picker selected state
+  let selectedPickerIndexRelay = BehaviorRelay<(typeIndex: Int, subtypeIndex: Int)>(value: (0, 0))
+  var selectedPickerIndex: (typeIndex: Int, subtypeIndex: Int) {
+    return selectedPickerIndexRelay.value
+  }
+  
+  // footer height
+  lazy var footerHeightDriver: Driver<CGFloat> = footerHeightRelay.asDriver()
+  var footerHeight: CGFloat {
+    return footerHeightRelay.value
+  }
+  private let footerHeightRelay = BehaviorRelay<CGFloat>(value: 44)
   
   // MARK: - Init
   init(webService: TopListWebServiceProtocol = TopListWebService()) {
@@ -95,6 +106,35 @@ class MangaViewModel: BaseViewModel {
         }
       })
       .bind(to: selectedSubtypeTitleRelay)
+      .disposed(by: disposeBag)
+    
+    // Bind loadingStateRelay to footerHeightRelay
+    loadingStateRelay
+      .map({ (loadingState) -> CGFloat in
+        return loadingState == .loadEnd ? 0 : 44
+      })
+      .bind(to: footerHeightRelay)
+      .disposed(by: disposeBag)
+    
+    // Bind selectedPickerIndexRelay to selectedTypeRelay
+    selectedPickerIndexRelay
+      .skip(1)
+      .distinctUntilChanged { (pre, cur) -> Bool in
+        return pre.typeIndex == cur.typeIndex && pre.subtypeIndex == cur.subtypeIndex
+      }
+      .map { (typeIndex, subtypeIndex) -> TopListAPIType in
+        let type = TopListType.allCases[typeIndex]
+        switch type {
+        case .anime:
+          let subType = AnimateSubtype.allCases[subtypeIndex]
+          return .anime(subType: subType)
+          
+        case .manga:
+          let subType = MangaSubtype.allCases[subtypeIndex]
+          return .manga(subType: subType)
+        }
+      }
+      .bind(to: selectedTypeRelay)
       .disposed(by: disposeBag)
   }
   
@@ -174,18 +214,5 @@ class MangaViewModel: BaseViewModel {
   func resetTopList() {
     nextPage = 1
     loadingStateRelay.accept(.initialize)
-  }
-  
-  // MARK: - Getter
-  func getTypeString(with index: Int) -> String {
-    return typeStrings[index]
-  }
-  
-  func getSubtypeString(with index: Int) -> String {
-    return subtypeStrings[index]
-  }
-  
-  func getCellViewModel(with index: Int) -> TopItemCellViewModel {
-    return topItemCellViewModels[index]
   }
 }
