@@ -13,12 +13,12 @@ protocol FavoriteItemViewControllerDelegate: AnyObject {
 }
 
 final class FavoriteItemViewController: UIViewController {
-  static let storyboardInstance: FavoriteItemViewController = {
+  static func storyboardInstance() -> FavoriteItemViewController {
     let storyboard = UIStoryboard(name: String(describing: FavoriteItemViewController.self), bundle: nil)
     let vc = storyboard.instantiateInitialViewController() as! FavoriteItemViewController
     
     return vc
-  }()
+  }
   
   weak var delegate: FavoriteItemViewControllerDelegate?
   

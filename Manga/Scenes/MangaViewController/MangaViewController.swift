@@ -260,7 +260,7 @@ extension MangaViewController: UITableViewDelegate {
       .tap
       .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
-        let favoriteVC = FavoriteItemViewController.storyboardInstance
+        let favoriteVC = FavoriteItemViewController.storyboardInstance()
         favoriteVC.delegate = self
         self.present(favoriteVC, animated: true, completion: nil)
       })
