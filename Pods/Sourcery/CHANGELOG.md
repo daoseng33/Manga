@@ -1,6 +1,47 @@
 # Sourcery CHANGELOG
 
 ---
+## 1.2.1
+
+## Internal Changes
+Tweaks some warnings into info logs to not generate Xcode warnings
+
+## 1.2.0
+
+### New Features
+- `Self` reference is resolved to correct type. [Enchancement Request](https://github.com/krzysztofzablocki/Sourcery/issues/900)
+- Sourcery will now attempt to resolve local type names across modules when it can be done without ambiguity. Previously we only supported fully qualified names. [Enchancement Request](https://github.com/krzysztofzablocki/Sourcery/issues/899)
+
+## Internal Changes
+- Sourcery is now always distributed via SPM, this creates much nicer diffs when using CocoaPods distribution.
+
+## 1.1.1
+
+- Updates StencilSwiftKit to 2.8.0
+
+## 1.1.0
+
+### New Features
+- [PR](https://github.com/krzysztofzablocki/Sourcery/pull/897) Methods, Variables and Subscripts are now uniqued in all accessors:
+  - `methods` and `allMethods` 
+  - `variables` and `allVariables`
+  - `subscripts` and `allSubscripts`
+  - New accessor is introduced that doesn't get rid of duplicates `rawMethods`, `rawVariables`, `rawSubscripts`s. 
+  - The deduping process works by priority order (highest to lowest):
+    - base declaration
+    - inheritance
+    - protocol conformance
+    - extensions
+
+## 1.0.3
+
+### Internal Changes
+- updated xcodeproj, Stencil and StencilSwiftKit to newest versions
+
+### Bug fixes
+- [Fixes type resolution when using xcode project integration](https://github.com/krzysztofzablocki/Sourcery/issues/887)
+- Matches the behaviour of `allMethods` to `allVariables` by only listing the same method once, even if defined in both base protocol and extended class. You could still walk the inheritance tree if you need to (to get all original methods), but for purpose of majority of codegen this is unneccessary.
+
 ## 1.0.2
 
 ### Bug fixes

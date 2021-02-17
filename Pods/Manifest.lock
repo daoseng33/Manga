@@ -1,7 +1,7 @@
 PODS:
   - Alamofire (5.4.1)
   - DAOFloatingPanel (0.4.0)
-  - Kingfisher (6.0.1)
+  - Kingfisher (6.1.1)
   - MBProgressHUD (1.2.0)
   - Moya/Core (14.0.0):
     - Alamofire (~> 5.0)
@@ -24,9 +24,9 @@ PODS:
   - RxRelay (5.1.1):
     - RxSwift (~> 5)
   - RxSwift (5.1.1)
-  - Sourcery (1.0.2)
-  - SwiftyMocky (4.0.1):
-    - Sourcery (>= 1.0)
+  - Sourcery (1.2.1)
+  - SwiftyMocky (4.0.3):
+    - Sourcery (>= 1.0.2)
 
 DEPENDENCIES:
   - DAOFloatingPanel
@@ -61,7 +61,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   DAOFloatingPanel: 89fa49fcb2a3d1a77c3a116399f7f3970c59cb59
-  Kingfisher: adde87a4f74f6a3845395769354efff593581740
+  Kingfisher: 676d63307fbef6ed5d5ed400bff36983480d7500
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   Realm: 80f4fb2971ccb9adc27a47d0955ae8e533a7030b
@@ -71,8 +71,8 @@ SPEC CHECKSUMS:
   RxGesture: d6bd7447ca3a596c7a9702a6a2b6a2bb5d8bae54
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
-  Sourcery: e8951e8759ef6a3a0cce412db64832dd23343041
-  SwiftyMocky: 707d9cdd5decef8083f6dc76892977ee1cf8bbce
+  Sourcery: 4c6e420c227f95d566f133753a438b4ab026ced6
+  SwiftyMocky: d3a1d3f4fb6978f34ef7b8acfd3860c089fc24da
 
 PODFILE CHECKSUM: 03dec4a826bb84eecc5450832480563b9f06d5f0
 
