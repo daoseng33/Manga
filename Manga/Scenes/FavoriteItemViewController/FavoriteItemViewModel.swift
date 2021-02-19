@@ -8,7 +8,7 @@
 import Foundation
 import RxCocoa
 
-final class FavoriteItemViewModel: BaseViewModel {
+final class FavoriteItemViewModel {
   // MARK: - Properties
   var shouldReloadData = false
   private let realm = RealmProvider.favoriteItem.realm
@@ -21,7 +21,7 @@ final class FavoriteItemViewModel: BaseViewModel {
   private let topItemCellViewModelsRelay: BehaviorRelay<[TopItemCellViewModel]>
   
   // MARK: - Init
-  override init() {
+  init() {
     let objects = realm.objects(RealmTopItem.self)
     var cellViewModels: [TopItemCellViewModel] = []
     objects.forEach { realmTopItem  in
@@ -31,7 +31,5 @@ final class FavoriteItemViewModel: BaseViewModel {
     }
     
     topItemCellViewModelsRelay = BehaviorRelay<[TopItemCellViewModel]>(value: cellViewModels)
-    
-    super.init()
   }
 }

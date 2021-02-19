@@ -9,9 +9,11 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-final class TopItemCellViewModel: BaseViewModel {
+final class TopItemCellViewModel {
   let favoriteItemService: FavoriteItemServiceProtocol
   let topItem: TopItem
+  
+  private let disposeBag = DisposeBag()
   
   // image url
   lazy var imageUrlDriver = imageUrlRelay.asDriver()
@@ -44,7 +46,7 @@ final class TopItemCellViewModel: BaseViewModel {
     return favoriteItemService.isItemLike(with: topItem.malId)
   }
   var urlString: String? = nil
-  let handleListTappedSubject = PublishSubject<Void>()
+  let handleListTappedRelay = PublishRelay<UITapGestureRecognizer>()
   
   init(topItem: TopItem, favoriteItemService: FavoriteItemServiceProtocol = FavoriteItemService()) {
     self.topItem = topItem
@@ -57,13 +59,12 @@ final class TopItemCellViewModel: BaseViewModel {
     endDateRelay = BehaviorRelay<String>(value: topItem.endDate ?? "-")
     urlString = topItem.url
 
-    super.init()
     setupObservable()
   }
   
   private func setupObservable() {
-    handleListTappedSubject
-      .subscribe(onNext: { [weak self] in
+    handleListTappedRelay
+      .subscribe(onNext: { [weak self] _ in
         guard let self = self else { return }
         // Reverse favorite state
         let shouldAddFavoriteItem = !self.isFavorite

@@ -9,13 +9,44 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class MangaViewModel: BaseViewModel {
+enum LoadingState {
+  case initialize
+  case loading
+  case loaded
+  case loadEnd
+  case error
+}
+
+final class MangaViewModel {
   // MARK: - Properties
   var shouldResetData: Bool = false
   
   private let webService: TopListWebServiceProtocol
   private let itemsPerPage: Int = 50
   private var nextPage: Int = 1
+  private let disposeBag = DisposeBag()
+  
+  lazy var loadingStateDriver = loadingStateRelay.asDriver()
+  private let loadingStateRelay = BehaviorRelay<LoadingState>(value: .initialize)
+  private var loadingState: LoadingState {
+    return loadingStateRelay.value
+  }
+  
+  private var shouldLoadMoreData: Bool {
+    return loadingState != .loading && loadingState != .loadEnd
+  }
+  
+  // reload data observer
+  lazy var reloadDataSignal = reloadDataRelay.asSignal()
+  private let reloadDataRelay = PublishRelay<Void>()
+  
+  // insert data observer
+  lazy var insertDataSignal = insertDataRelay.asSignal()
+  private let insertDataRelay = PublishRelay<(pre: [TopItemCellViewModel], cur: [TopItemCellViewModel])>()
+  
+  // error message
+  lazy var errorMessageSignal = errorMessageRelay.asSignal()
+  private let errorMessageRelay = PublishRelay<String>()
   
   // top item cell view models
   let topItemCellViewModelsRelay = BehaviorRelay<[TopItemCellViewModel]>(value: [])
@@ -66,8 +97,6 @@ final class MangaViewModel: BaseViewModel {
   // MARK: - Init
   init(webService: TopListWebServiceProtocol = TopListWebService()) {
     self.webService = webService
-    
-    super.init()
     
     setupObservable()
   }
@@ -136,82 +165,73 @@ final class MangaViewModel: BaseViewModel {
       }
       .bind(to: selectedTypeRelay)
       .disposed(by: disposeBag)
+    
+    // Insert or delete data depends on top items content
+    topItemCellViewModelsRelay
+      .previous(startWith: [])
+      .subscribe(onNext: { [weak self] pre, cur in
+        guard let self = self else { return }
+        if self.shouldResetData {
+          self.reloadDataRelay.accept(())
+        } else {
+          self.insertDataRelay.accept((pre, cur))
+        }
+      })
+      .disposed(by: disposeBag)
   }
   
   // MARK: - Data handler
-  func fetchTopList(shouldReset: Bool = false) -> Completable {
-    return Completable.create(subscribe: { [weak self] completable in
-      guard let self = self else { return Disposables.create() }
-      
-      if shouldReset {
-        self.resetTopList()
-      }
-      
-      self.loadingStateRelay.accept(.loading)
-      
-      let disposable = self.webService.fetchTopList(with: self.selectedType, page: self.nextPage)
-        .subscribe({ [weak self] event in
-          guard let self = self else { return }
+  func fetchTopList(shouldReset: Bool = false) {
+    if shouldReset {
+      self.resetTopList()
+    }
+    
+    self.loadingStateRelay.accept(.loading)
+    
+    webService.fetchTopList(with: self.selectedType, page: self.nextPage)
+      .subscribe({ [weak self] event in
+        guard let self = self else { return }
+        
+        switch event {
+        case .success(let response):
+          self.shouldResetData = self.nextPage == 1
           
-          switch event {
-          case .success(let response):
-            self.shouldResetData = self.nextPage == 1
-            
-            // Update top item cell view models
-            let cellViewModels = response.top.map { TopItemCellViewModel(topItem: $0) }
-            
-            // Update top items data
-            if self.shouldResetData {
-              self.topItemCellViewModelsRelay.accept(cellViewModels)
-            } else {
-              self.topItemCellViewModelsRelay.accept(self.topItemCellViewModels + cellViewModels)
-            }
-            
-            // Check if there are more datas
-            if response.top.count < self.itemsPerPage {
-              self.loadingStateRelay.accept(.loadEnd)
-            } else {
-              // Append next page
-              self.nextPage += 1
-              self.loadingStateRelay.accept(.loaded)
-            }
-            
-            completable(.completed)
-            
-          case .error(let error):
-            self.loadingStateRelay.accept(.error)
-            completable(.error(error))
+          // Update top item cell view models
+          let cellViewModels = response.top.map { TopItemCellViewModel(topItem: $0) }
+          
+          // Update top items data
+          if self.shouldResetData {
+            self.topItemCellViewModelsRelay.accept(cellViewModels)
+          } else {
+            self.topItemCellViewModelsRelay.accept(self.topItemCellViewModels + cellViewModels)
           }
-        })
-      
-      return Disposables.create([disposable])
-    })
+          
+          // Check if there are more datas
+          if response.top.count < self.itemsPerPage {
+            self.loadingStateRelay.accept(.loadEnd)
+          } else {
+            // Append next page
+            self.nextPage += 1
+            self.loadingStateRelay.accept(.loaded)
+          }
+          
+        case .error(let error):
+          self.loadingStateRelay.accept(.error)
+          self.errorMessageRelay.accept(error.localizedDescription)
+        }
+      })
+      .disposed(by: disposeBag)
   }
   
-  func loadMoreData(with index: Int) -> Completable {
-    return Completable.create(subscribe: { [weak self] completable in
-      guard let self = self, index == self.topItemCellViewModels.count - 1, self.shouldLoadMoreData else {
-        completable(.completed)
-        return Disposables.create()
-      }
-      
-      // Load more data if user reach last cell
-      let disposable = self.fetchTopList()
-        .subscribe({ event in
-          switch event {
-          case .completed:
-            completable(.completed)
-            
-          case .error(let error):
-            completable(.error(error))
-          }
-        })
-      
-      return Disposables.create([disposable])
-    })
+  func loadMoreData(with index: Int) {
+    guard index == topItemCellViewModels.count - 1, shouldLoadMoreData else {
+      return
+    }
+    
+    fetchTopList()
   }
   
-  func resetTopList() {
+  private func resetTopList() {
     nextPage = 1
     loadingStateRelay.accept(.initialize)
   }

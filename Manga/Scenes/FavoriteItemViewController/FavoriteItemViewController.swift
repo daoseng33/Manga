@@ -69,14 +69,15 @@ extension FavoriteItemViewController: UITableViewDataSource {
     let cellViewModel = viewModel.topItemCellViewModels[indexPath.row]
     let cell = tableView.dequeueReusableCell(with: TopItemTableViewCell.self, for: indexPath)
     cell.configure(cellViewModel: cellViewModel)
-    cellViewModel.handleListTappedSubject
-      .observeOn(MainScheduler.instance)
-      .subscribe(onNext: { [weak self] in
+    
+    cellViewModel.handleListTappedRelay
+      .asSignal()
+      .emit(onNext: { [weak self] _ in
         guard let self = self else { return }
         self.viewModel.shouldReloadData = true
         tableView.reloadRows(at: [indexPath], with: .none)
       })
-      .disposed(by: cellViewModel.disposeBag)
+      .disposed(by: cell.disposeBag)
     
     return cell
   }

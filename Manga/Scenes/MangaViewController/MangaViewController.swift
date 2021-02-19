@@ -16,6 +16,8 @@ final class MangaViewController: UIViewController {
   private let disposeBag = DisposeBag()
   
   // MARK: - UI
+  private var hud: MBProgressHUD?
+  
   @IBOutlet weak var topListTableView: UITableView! {
     didSet {
       topListTableView.registerNibCell(type: TopItemTableViewCell.self)
@@ -80,7 +82,7 @@ final class MangaViewController: UIViewController {
       .observeOn(MainScheduler.instance)
       .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
-        self.fetchTopList(shouldShowHud: false, shouldReset: true)
+        self.viewModel.fetchTopList(shouldReset: true)
       })
       .disposed(by: disposeBag)
   }
@@ -89,21 +91,23 @@ final class MangaViewController: UIViewController {
     viewModel.selectedTypeDriver
       .drive(onNext: { [weak self] selectedType in
         guard let self = self else { return }
-        self.fetchTopList(shouldShowHud: true, shouldReset: true)
+        self.hud = ProgressHUDProvider.showHUD(view: self.view)
+        self.viewModel.fetchTopList(shouldReset: true)
       })
       .disposed(by: disposeBag)
     
-    // Insert or delete data depends on top items content
-    viewModel.topItemCellViewModelsRelay
-      .previous(startWith: [])
-      .observeOn(MainScheduler.instance)
-      .subscribe(onNext: { [weak viewModel, weak topListTableView] pre, cur in
-        guard let viewModel = viewModel, let topListTableView = topListTableView else { return }
-        if viewModel.shouldResetData {
-          topListTableView.reloadData()
-        } else {
-          topListTableView.insertRows(with: pre, cur: cur)
-        }
+    // handle table view pagination
+    viewModel.reloadDataSignal
+      .emit(onNext: { [weak self] in
+        guard let self = self else { return }
+        self.topListTableView.reloadData()
+      })
+      .disposed(by: disposeBag)
+    
+    viewModel.insertDataSignal
+      .emit(onNext: { [weak self] pre, cur in
+        guard let self = self else { return }
+        self.topListTableView.insertRows(with: pre, cur: cur, section: 0, animation: .top)
       })
       .disposed(by: disposeBag)
     
@@ -113,6 +117,25 @@ final class MangaViewController: UIViewController {
         guard let self = self else { return }
         // Update footer view height
         self.topListTableView.update {}
+      })
+      .disposed(by: disposeBag)
+    
+    viewModel.loadingStateDriver
+      .filter { $0 == .loaded || $0 == .loadEnd }
+      .drive(onNext: { [weak self] _ in
+        guard let self = self else { return }
+        // hide progress hud
+        self.hud?.hide(animated: true)
+        
+        // table view end refreshing
+        self.topListTableView.refreshControl?.endRefreshing()
+      })
+      .disposed(by: disposeBag)
+    
+    viewModel.errorMessageSignal
+      .emit(onNext: { [weak self] errorMessage in
+        guard let self = self else { return }
+        self.showErrorAlert(title: "Oops", message: errorMessage)
       })
       .disposed(by: disposeBag)
   }
@@ -147,38 +170,6 @@ final class MangaViewController: UIViewController {
       .disposed(by: disposeBag)
   }
   
-  // MARK: - Fetch data
-  private func fetchTopList(shouldShowHud: Bool = true, shouldReset: Bool = false) {
-    var hud: MBProgressHUD?
-    if shouldShowHud {
-      hud = ProgressHUDProvider.showHUD(view: self.view)
-    }
-    
-    viewModel.fetchTopList(shouldReset: shouldReset)
-      .observeOn(MainScheduler.instance)
-      .subscribe({ [weak self] event in
-        guard let self = self else { return }
-        // hide progress hud
-        hud?.hide(animated: true)
-        
-        // table view end refreshing
-        if self.topListTableView.refreshControl?.isRefreshing ?? false {
-          self.topListTableView.refreshControl?.endRefreshing()
-        }
-        
-        switch event {
-        case .completed:
-          break
-          
-        case .error(let error):
-          // For this project I will simply show error.localizedDescription
-          // In production, we may want to show custom error instead of "real" error log to our user.
-          self.showErrorAlert(title: "Oops", message: error.localizedDescription)
-        }
-      })
-      .disposed(by: viewModel.disposeBag)
-  }
-  
   // MARK: - Factories
   private func createPickerView() -> UIPickerView {
     let pickerView = UIPickerView()
@@ -210,9 +201,9 @@ extension MangaViewController: UITableViewDataSource {
     let cell = tableView.dequeueReusableCell(with: TopItemTableViewCell.self, for: indexPath)
     cell.configure(cellViewModel: cellViewModel)
     
-    cellViewModel.handleListTappedSubject
-      .observeOn(MainScheduler.instance)
-      .subscribe(onNext: { [weak tableView] in
+    cellViewModel.handleListTappedRelay
+      .asSignal()
+      .emit(onNext: { [weak tableView] _ in
         guard let tableView = tableView else { return }
         tableView.reloadRows(at: [indexPath], with: .none)
       })
@@ -220,8 +211,6 @@ extension MangaViewController: UITableViewDataSource {
     
     // Load more data
     viewModel.loadMoreData(with: indexPath.row)
-      .subscribe()
-      .disposed(by: cell.disposeBag)
     
     return cell
   }
@@ -269,11 +258,11 @@ extension MangaViewController: UITableViewDelegate {
     // Data binding
     viewModel.selectedTypeTitleDriver
       .drive(view.selectedTypeLabel.rx.text)
-      .disposed(by: viewModel.disposeBag)
+      .disposed(by: disposeBag)
     
     viewModel.selectedSubtypeTitleDriver
       .drive(view.selectedSubtypeLabel.rx.text)
-      .disposed(by: viewModel.disposeBag)
+      .disposed(by: disposeBag)
     
     return view
   }

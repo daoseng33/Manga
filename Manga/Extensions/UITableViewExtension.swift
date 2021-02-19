@@ -23,14 +23,14 @@ extension UITableView {
     self.endUpdates()
   }
   
-  func insertRows<T>(with pre: [T], cur: [T]) {
+  func insertRows<T>(with pre: [T], cur: [T], section: Int = 0, animation: UITableView.RowAnimation = .automatic) {
     guard pre.count > 0 || cur.count > 0 else { return }
     
     update {
       let startIndex = pre.count
       let endIndex = cur.count - 1
-      let indexpaths = (startIndex...endIndex).map { IndexPath(item: $0, section: 0) }
-      insertRows(at: indexpaths, with: .automatic)
+      let indexpaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
+      insertRows(at: indexpaths, with: animation)
     }
   }
 }

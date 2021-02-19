@@ -74,10 +74,7 @@ final class TopItemTableViewCell: UITableViewCell {
     
     mangaLikeImageView.rx.tapGesture()
       .when(.recognized)
-      .map({ _ -> Void in
-        return ()
-      })
-      .bind(to: cellViewModel.handleListTappedSubject)
+      .bind(to: cellViewModel.handleListTappedRelay)
       .disposed(by: disposeBag)
   }
 }
