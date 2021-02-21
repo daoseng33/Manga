@@ -42,14 +42,14 @@ class MangaViewModelTests: XCTestCase {
   func testMangaViewModel_whenInitFetchTopList_checkDataCount() {
     sut.fetchTopList()
     
-    // topItemCellViewModels count should be 50
-    XCTAssertEqual(sut.topItemCellViewModels.count, 50)
+    // datas count should be 50
+    XCTAssertEqual(sut.datas.count, 50)
   }
   
   func testMangaViewModel_whenInitFetchTopList_checkFirstItemId() {
     sut.fetchTopList()
     
-    let firstCellViewModel = sut.topItemCellViewModels[0]
+    let firstCellViewModel = sut.datas[0]
     // First id should be 1535
     XCTAssertEqual(firstCellViewModel.topItem.malId, 1535)
   }
@@ -57,7 +57,7 @@ class MangaViewModelTests: XCTestCase {
   func testMangaViewModel_whenInitFetchTopList_checkFirstCellTitle() {
     sut.fetchTopList()
     
-    let firstCellViewModel = sut.topItemCellViewModels[0]
+    let firstCellViewModel = sut.datas[0]
     // First title should be "Death Note"
     XCTAssertEqual(firstCellViewModel.title, "Death Note")
   }
@@ -65,7 +65,7 @@ class MangaViewModelTests: XCTestCase {
   func testMangaViewModel_whenInitFetchTopList_checkLastItemId() {
     sut.fetchTopList()
     
-    let firstCellViewModel = sut.topItemCellViewModels[49]
+    let firstCellViewModel = sut.datas[49]
     // Last id should be 28171
     XCTAssertEqual(firstCellViewModel.topItem.malId, 28171)
   }
@@ -73,7 +73,7 @@ class MangaViewModelTests: XCTestCase {
   func testMangaViewModel_whenInitFetchTopList_checkLastCellTitle() {
     sut.fetchTopList()
     
-    let firstCellViewModel = sut.topItemCellViewModels[49]
+    let firstCellViewModel = sut.datas[49]
     // Last title should be "Shokugeki no Souma"
     XCTAssertEqual(firstCellViewModel.title, "Shokugeki no Souma")
   }
@@ -114,7 +114,7 @@ class MangaViewModelTests: XCTestCase {
     sut.loadMoreData(with: 49)
     
     // Data count should be 100
-    XCTAssertEqual(sut.topItemCellViewModels.count, 99)
+    XCTAssertEqual(sut.datas.count, 99)
   }
   
   func testMangaViewModel_whenLoadMoreData_checkLastCellTitle() {
@@ -124,7 +124,7 @@ class MangaViewModelTests: XCTestCase {
     // Load more data
     sut.loadMoreData(with: 49)
     
-    let cellViewModel = sut.topItemCellViewModels[98]
+    let cellViewModel = sut.datas[98]
     XCTAssertEqual(cellViewModel.title, "Ouran Koukou Host Club")
   }
   
@@ -135,17 +135,17 @@ class MangaViewModelTests: XCTestCase {
     sut.loadMoreData(with: 49)
     
     // Now has two pack of datas
-    XCTAssertEqual(sut.topItemCellViewModels.count, 99)
+    XCTAssertEqual(sut.datas.count, 99)
     
     sut.fetchTopList(shouldReset: true)
     // Data count should be 50 after reload data
-    XCTAssertEqual(sut.topItemCellViewModels.count, 50)
+    XCTAssertEqual(sut.datas.count, 50)
   }
   
   func testMangaViewModel_whenSelectDifferentSubtype_checkFirstCellTitle() throws {
     // Load first pack of data
     sut.fetchTopList()
-    let firstCellViewModel = sut.topItemCellViewModels[0]
+    let firstCellViewModel = sut.datas[0]
     // First title should be "Death Note"
     XCTAssertEqual(firstCellViewModel.title, "Death Note")
     
@@ -154,7 +154,7 @@ class MangaViewModelTests: XCTestCase {
     let _ = try sut.selectedTypeDriver.toBlocking(timeout: 1.0).first()
     sut.fetchTopList(shouldReset: true)
     
-    let upcomingFirstCellViewModel = sut.topItemCellViewModels[0]
+    let upcomingFirstCellViewModel = sut.datas[0]
     // First title should be "Shingeki no Kyojin: The Final Season"
     XCTAssertEqual(upcomingFirstCellViewModel.title, "Shingeki no Kyojin: The Final Season")
   }
@@ -162,7 +162,7 @@ class MangaViewModelTests: XCTestCase {
   func testMangaViewModel_whenSelectDifferentSubtype_checkFirstItemId() throws {
     // Load first pack of data
     sut.fetchTopList()
-    let firstCellViewModel = sut.topItemCellViewModels[0]
+    let firstCellViewModel = sut.datas[0]
     // First id should be 1535
     XCTAssertEqual(firstCellViewModel.topItem.malId, 1535)
     
@@ -171,7 +171,7 @@ class MangaViewModelTests: XCTestCase {
     let _ = try sut.selectedTypeDriver.toBlocking(timeout: 1.0).first()
     sut.fetchTopList(shouldReset: true)
     
-    let upcomingFirstCellViewModel = sut.topItemCellViewModels[0]
+    let upcomingFirstCellViewModel = sut.datas[0]
     // First id should be 40028
     XCTAssertEqual(upcomingFirstCellViewModel.topItem.malId, 40028)
   }
@@ -179,7 +179,7 @@ class MangaViewModelTests: XCTestCase {
   func testMangaViewModel_whenSelectDifferentType_checkFirstCellTitle() throws {
     // Load first pack of data
     sut.fetchTopList()
-    let firstCellViewModel = sut.topItemCellViewModels[0]
+    let firstCellViewModel = sut.datas[0]
     // First title should be "Death Note"
     XCTAssertEqual(firstCellViewModel.title, "Death Note")
     
@@ -188,7 +188,7 @@ class MangaViewModelTests: XCTestCase {
     let _ = try sut.selectedTypeDriver.toBlocking(timeout: 1.0).first()
     sut.fetchTopList(shouldReset: true)
     
-    let upcomingFirstCellViewModel = sut.topItemCellViewModels[0]
+    let upcomingFirstCellViewModel = sut.datas[0]
     // First title should be "Shingeki no Kyojin: The Final Season"
     XCTAssertEqual(upcomingFirstCellViewModel.title, "Shingeki no Kyojin")
   }
@@ -196,7 +196,7 @@ class MangaViewModelTests: XCTestCase {
   func testMangaViewModel_whenSelectDifferentType_checkFirstItemId() throws {
     // Load first pack of data
     sut.fetchTopList()
-    let firstCellViewModel = sut.topItemCellViewModels[0]
+    let firstCellViewModel = sut.datas[0]
     // First id should be 1535
     XCTAssertEqual(firstCellViewModel.topItem.malId, 1535)
     
@@ -205,7 +205,7 @@ class MangaViewModelTests: XCTestCase {
     let _ = try sut.selectedTypeDriver.toBlocking(timeout: 1.0).first()
     sut.fetchTopList(shouldReset: true)
     
-    let upcomingFirstCellViewModel = sut.topItemCellViewModels[0]
+    let upcomingFirstCellViewModel = sut.datas[0]
     // First id should be 23390
     XCTAssertEqual(upcomingFirstCellViewModel.topItem.malId, 23390)
   }

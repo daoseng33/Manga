@@ -12,7 +12,7 @@ import RxSwift
 class MangaWebService {
   static let shared = MangaWebService()
   
-  func request<T: TargetType, U: Decodable>(provider: MoyaProvider<T>, targetType: T, mappingType: U.Type) -> Single<U> {
+  func request<T: MangaTargetType, U: Decodable>(provider: MoyaProvider<T>, targetType: T, mappingType: U.Type) -> Single<U> {
     return provider.rx
       .request(targetType)
       .map(mappingType, using: JSONDecoder.default)

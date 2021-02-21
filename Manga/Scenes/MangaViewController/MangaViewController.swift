@@ -82,7 +82,8 @@ final class MangaViewController: UIViewController {
       .observeOn(MainScheduler.instance)
       .subscribe(onNext: { [weak self] in
         guard let self = self else { return }
-        self.viewModel.fetchTopList(shouldReset: true)
+        self.viewModel.resetState()
+        self.viewModel.fetchTopList()
       })
       .disposed(by: disposeBag)
   }
@@ -92,7 +93,8 @@ final class MangaViewController: UIViewController {
       .drive(onNext: { [weak self] selectedType in
         guard let self = self else { return }
         self.hud = ProgressHUDProvider.showHUD(view: self.view)
-        self.viewModel.fetchTopList(shouldReset: true)
+        self.viewModel.resetState()
+        self.viewModel.fetchTopList()
       })
       .disposed(by: disposeBag)
     
@@ -120,22 +122,24 @@ final class MangaViewController: UIViewController {
       })
       .disposed(by: disposeBag)
     
-    viewModel.loadingStateDriver
-      .filter { $0 == .loaded || $0 == .loadEnd }
-      .drive(onNext: { [weak self] _ in
-        guard let self = self else { return }
-        // hide progress hud
-        self.hud?.hide(animated: true)
-        
-        // table view end refreshing
-        self.topListTableView.refreshControl?.endRefreshing()
-      })
-      .disposed(by: disposeBag)
     
-    viewModel.errorMessageSignal
-      .emit(onNext: { [weak self] errorMessage in
+    viewModel.loadingStateDriver
+      .drive(onNext: { [weak self] state in
         guard let self = self else { return }
-        self.showErrorAlert(title: "Oops", message: errorMessage)
+        switch state {
+        case .loaded, .loadEnd:
+          // hide progress hud
+          self.hud?.hide(animated: true)
+          
+          // table view end refreshing
+          self.topListTableView.refreshControl?.endRefreshing()
+          
+        case .error(let message):
+          self.showErrorAlert(title: "Oops", message: message)
+          
+        default:
+          break
+        }
       })
       .disposed(by: disposeBag)
   }
@@ -193,11 +197,11 @@ final class MangaViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension MangaViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return viewModel.topItemCellViewModels.count
+    return viewModel.tableCount
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cellViewModel = viewModel.topItemCellViewModels[indexPath.row]
+    let cellViewModel = viewModel.datas[indexPath.row]
     let cell = tableView.dequeueReusableCell(with: TopItemTableViewCell.self, for: indexPath)
     cell.configure(cellViewModel: cellViewModel)
     
@@ -276,7 +280,7 @@ extension MangaViewController: UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let cellViewModel = viewModel.topItemCellViewModels[indexPath.row]
+    let cellViewModel = viewModel.datas[indexPath.row]
     if let urlString = cellViewModel.urlString {
       let webVC = WebViewController(urlString: urlString, headerTitle: cellViewModel.title)
       self.present(webVC, animated: true, completion: nil)

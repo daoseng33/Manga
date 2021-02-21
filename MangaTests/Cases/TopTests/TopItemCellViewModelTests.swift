@@ -62,7 +62,7 @@ class TopItemCellViewModelTests: XCTestCase {
     Given(mockFavoriteService, .isItemLike(with: 40028, willReturn: false))
     
     let sut = TopItemCellViewModel(topItem: topItem, favoriteItemService: mockFavoriteService)
-    sut.handleListTappedSubject.onNext(())
+    sut.handleListTappedRelay.accept(UITapGestureRecognizer())
     
     // addItemToFavorite should called once
     Verify(mockFavoriteService, 1, .addItemToFavoriteList(with: .any))
@@ -73,7 +73,7 @@ class TopItemCellViewModelTests: XCTestCase {
     Given(mockFavoriteService, .isItemLike(with: 40028, willReturn: true))
     
     let sut = TopItemCellViewModel(topItem: topItem, favoriteItemService: mockFavoriteService)
-    sut.handleListTappedSubject.onNext(())
+    sut.handleListTappedRelay.accept(UITapGestureRecognizer())
     
     // addItemToFavorite should called once
     Verify(mockFavoriteService, 1, .deleteItemFromFavoriteList(with: .any))

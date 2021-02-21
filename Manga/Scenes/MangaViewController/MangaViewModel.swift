@@ -9,49 +9,23 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-enum LoadingState {
-  case initialize
-  case loading
-  case loaded
-  case loadEnd
-  case error
-}
-
 final class MangaViewModel {
   // MARK: - Properties
-  var shouldResetData: Bool = false
-  
   private let webService: TopListWebServiceProtocol
-  private let itemsPerPage: Int = 50
-  private var nextPage: Int = 1
   private let disposeBag = DisposeBag()
+  private let pagination: MangaPagination<TopItemCellViewModel> = MangaPagination()
   
-  lazy var loadingStateDriver = loadingStateRelay.asDriver()
-  private let loadingStateRelay = BehaviorRelay<LoadingState>(value: .initialize)
-  private var loadingState: LoadingState {
-    return loadingStateRelay.value
+  // Table related
+  lazy var reloadDataSignal: Signal<Void> = pagination.reloadDataRelay.asSignal()
+  lazy var insertDataSignal: Signal<(pre: [TopItemCellViewModel], cur: [TopItemCellViewModel])> = pagination.insertDataRelay.asSignal()
+  lazy var loadingStateDriver = pagination.loadingStateRelay.asDriver()
+  
+  var tableCount: Int {
+    return pagination.datas.count
   }
   
-  private var shouldLoadMoreData: Bool {
-    return loadingState != .loading && loadingState != .loadEnd
-  }
-  
-  // reload data observer
-  lazy var reloadDataSignal = reloadDataRelay.asSignal()
-  private let reloadDataRelay = PublishRelay<Void>()
-  
-  // insert data observer
-  lazy var insertDataSignal = insertDataRelay.asSignal()
-  private let insertDataRelay = PublishRelay<(pre: [TopItemCellViewModel], cur: [TopItemCellViewModel])>()
-  
-  // error message
-  lazy var errorMessageSignal = errorMessageRelay.asSignal()
-  private let errorMessageRelay = PublishRelay<String>()
-  
-  // top item cell view models
-  let topItemCellViewModelsRelay = BehaviorRelay<[TopItemCellViewModel]>(value: [])
-  var topItemCellViewModels: [TopItemCellViewModel] {
-    return topItemCellViewModelsRelay.value
+  var datas: [TopItemCellViewModel] {
+    return pagination.datas
   }
   
   // selected type
@@ -138,9 +112,13 @@ final class MangaViewModel {
       .disposed(by: disposeBag)
     
     // Bind loadingStateRelay to footerHeightRelay
-    loadingStateRelay
+    pagination.loadingStateRelay
       .map({ (loadingState) -> CGFloat in
-        return loadingState == .loadEnd ? 0 : 44
+        if case .loadEnd = loadingState {
+          return 0
+        } else {
+          return 44
+        }
       })
       .bind(to: footerHeightRelay)
       .disposed(by: disposeBag)
@@ -165,74 +143,40 @@ final class MangaViewModel {
       }
       .bind(to: selectedTypeRelay)
       .disposed(by: disposeBag)
-    
-    // Insert or delete data depends on top items content
-    topItemCellViewModelsRelay
-      .previous(startWith: [])
-      .subscribe(onNext: { [weak self] pre, cur in
-        guard let self = self else { return }
-        if self.shouldResetData {
-          self.reloadDataRelay.accept(())
-        } else {
-          self.insertDataRelay.accept((pre, cur))
-        }
-      })
-      .disposed(by: disposeBag)
   }
   
   // MARK: - Data handler
-  func fetchTopList(shouldReset: Bool = false) {
-    if shouldReset {
-      self.resetTopList()
-    }
+  func resetState() {
+    pagination.resetState()
+  }
+  
+  func fetchTopList() {
+    pagination.startLoading()
     
-    self.loadingStateRelay.accept(.loading)
-    
-    webService.fetchTopList(with: self.selectedType, page: self.nextPage)
+    webService
+      .fetchTopList(with: self.selectedType, page: self.pagination.nextPage)
       .subscribe({ [weak self] event in
         guard let self = self else { return }
         
         switch event {
         case .success(let response):
-          self.shouldResetData = self.nextPage == 1
           
           // Update top item cell view models
           let cellViewModels = response.top.map { TopItemCellViewModel(topItem: $0) }
-          
-          // Update top items data
-          if self.shouldResetData {
-            self.topItemCellViewModelsRelay.accept(cellViewModels)
-          } else {
-            self.topItemCellViewModelsRelay.accept(self.topItemCellViewModels + cellViewModels)
-          }
-          
-          // Check if there are more datas
-          if response.top.count < self.itemsPerPage {
-            self.loadingStateRelay.accept(.loadEnd)
-          } else {
-            // Append next page
-            self.nextPage += 1
-            self.loadingStateRelay.accept(.loaded)
-          }
+          self.pagination.updateData(datas: cellViewModels)
           
         case .error(let error):
-          self.loadingStateRelay.accept(.error)
-          self.errorMessageRelay.accept(error.localizedDescription)
+          self.pagination.loadingStateRelay.accept(.error(message: error.localizedDescription))
         }
       })
       .disposed(by: disposeBag)
   }
   
   func loadMoreData(with index: Int) {
-    guard index == topItemCellViewModels.count - 1, shouldLoadMoreData else {
+    guard pagination.canLoadMoreData(with: index) else {
       return
     }
     
     fetchTopList()
-  }
-  
-  private func resetTopList() {
-    nextPage = 1
-    loadingStateRelay.accept(.initialize)
   }
 }
