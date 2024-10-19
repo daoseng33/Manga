@@ -8,5 +8,5 @@
 import Foundation
 
 struct TopList: Codable {
-  let top: [TopItem]
+  let data: [TopItem]
 }

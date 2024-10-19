@@ -15,8 +15,8 @@ enum TopListAPI {
 extension TopListAPI: MangaTargetType {
   var path: String {
     switch self {
-    case let .list(type, subtype, page):
-      return "/top/\(type)/\(page)/\(subtype)"
+    case let .list(type, _, _):
+      return "/top/\(type)"
     }
   }
   
@@ -60,8 +60,11 @@ extension TopListAPI: MangaTargetType {
   
   var task: Task {
     switch self {
-    case .list:
-      return .requestPlain
+    case let .list(_, subType, page):
+        return .requestParameters(parameters: [
+            "type": subType,
+            "page": page
+        ], encoding: URLEncoding.default)
     }
   }
   

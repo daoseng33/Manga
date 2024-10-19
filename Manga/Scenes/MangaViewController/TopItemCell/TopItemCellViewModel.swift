@@ -51,7 +51,7 @@ final class TopItemCellViewModel {
   init(topItem: TopItem, favoriteItemService: FavoriteItemServiceProtocol = FavoriteItemService()) {
     self.topItem = topItem
     self.favoriteItemService = favoriteItemService
-    imageUrlRelay = BehaviorRelay<URL>(value: URL(string: topItem.imageUrl)!)
+      imageUrlRelay = BehaviorRelay<URL>(value: URL(string: topItem.images!.jpg!.imageUrl!)!)
     titleRelay = BehaviorRelay<String>(value: topItem.title)
     rankRelay = BehaviorRelay<String>(value: "\(topItem.rank)")
     typeRelay = BehaviorRelay<String>(value: topItem.type)

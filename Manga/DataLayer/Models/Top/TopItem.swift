@@ -13,17 +13,17 @@ struct TopItem: Codable {
   let rank: Int
   let title: String
   let url: String?
-  let imageUrl: String
+    let images: Images?
   let type: String
   let startDate: String?
   let endDate: String?
   
-  init(malId: Int, rank: Int, title: String, url: String?, imageUrl: String, type: String, startDate: String?, endDate: String?) {
+    init(malId: Int, rank: Int, title: String, url: String?, images: Images, type: String, startDate: String?, endDate: String?) {
     self.malId = malId
     self.rank = rank
     self.title = title
     self.url = url
-    self.imageUrl = imageUrl
+        self.images = images
     self.type = type
     self.startDate = startDate
     self.endDate = endDate
@@ -34,7 +34,7 @@ struct TopItem: Codable {
     rank = realmTopItem.rank
     title = realmTopItem.title
     url = realmTopItem.url
-    imageUrl = realmTopItem.imageUrl
+      images = realmTopItem.images
     type = realmTopItem.type
     startDate = realmTopItem.startDate
     endDate = realmTopItem.endDate
@@ -46,7 +46,7 @@ struct TopItem: Codable {
   dynamic var rank: Int = 0
   dynamic var title: String = ""
   dynamic var url: String?
-  dynamic var imageUrl: String = ""
+    dynamic var images: Images?
   dynamic var type: String = ""
   dynamic var startDate: String?
   dynamic var endDate: String?
@@ -58,7 +58,7 @@ struct TopItem: Codable {
     rank = topItem.rank
     title = topItem.title
     url = topItem.url
-    imageUrl = topItem.imageUrl
+      images = topItem.images
     type = topItem.type
     startDate = topItem.startDate
     endDate = topItem.endDate

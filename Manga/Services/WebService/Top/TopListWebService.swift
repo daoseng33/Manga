@@ -16,25 +16,25 @@ enum TopListType: String, CaseIterable {
 }
 
 enum AnimateSubtype: String, CaseIterable {
-  case bypopularity
-  case favorite
-  case airing
-  case upcoming
-  case tv
-  case movie
-  case ova
-  case special
+    case tv
+    case movie
+    case ova
+    case special
+    case ona
+    case music
+    case cm
+    case pv
+    case tvSpecial = "tv_special"
 }
 
 enum MangaSubtype: String, CaseIterable {
-  case bypopularity
-  case favorite
-  case manga
-  case novels
-  case oneshots
-  case doujin
-  case manhwa
-  case manhua
+    case manga
+    case novel
+    case lightnovel
+    case oneshot
+    case doujin
+    case manhwa
+    case manhua
 }
 
 enum TopListAPIType {

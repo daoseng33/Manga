@@ -32,7 +32,7 @@ class MangaViewModelTests: XCTestCase {
   
   func testMangaViewModel_whenInitialize_checkSelectedType() throws {
     guard let selectedType = try sut.selectedTypeDriver.toBlocking().first() else { XCTFail(); return }
-    if case TopListAPIType.anime(subType: .bypopularity) = selectedType {
+      if case TopListAPIType.anime(subType: .movie) = selectedType {
       XCTAssert(true)
     } else {
       XCTFail("Wrong selected type when init.")

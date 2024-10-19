@@ -12,6 +12,6 @@ protocol MangaTargetType: TargetType {}
 
 extension MangaTargetType {
   var baseURL: URL {
-    return URL(string: "https://api.jikan.moe/v3")!
+    return URL(string: "https://api.jikan.moe/v4")!
   }
 }

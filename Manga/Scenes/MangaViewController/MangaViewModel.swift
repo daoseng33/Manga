@@ -30,7 +30,7 @@ final class MangaViewModel {
   
   // selected type
   lazy var selectedTypeDriver: Driver<TopListAPIType> = selectedTypeRelay.asDriver()
-  private let selectedTypeRelay = BehaviorRelay<TopListAPIType>(value: .anime(subType: .bypopularity))
+    private let selectedTypeRelay = BehaviorRelay<TopListAPIType>(value: .anime(subType: .movie))
   private var selectedType: TopListAPIType {
     return selectedTypeRelay.value
   }
@@ -162,7 +162,7 @@ final class MangaViewModel {
         case .success(let response):
           
           // Update top item cell view models
-          let cellViewModels = response.top.map { TopItemCellViewModel(topItem: $0) }
+            let cellViewModels = response.data.map { TopItemCellViewModel(topItem: $0) }
           self.pagination.updateData(datas: cellViewModels)
           
         case .error(let error):

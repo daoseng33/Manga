@@ -20,7 +20,7 @@ class FavoriteItemServiceTests: XCTestCase {
                       rank: 1,
                       title: "Shingeki no Kyojin: The Final Season",
                       url: "https://myanimelist.net/anime/40028/Shingeki_no_Kyojin__The_Final_Season",
-                      imageUrl: "https://cdn.myanimelist.net/images/anime/1536/109462.jpg?s=8e5dd158dd33ff8de7b34e230f4a2c10",
+                      images: Images(jpg: JPG(imageUrl: "https://cdn.myanimelist.net/images/anime/1536/109462.jpg?s=8e5dd158dd33ff8de7b34e230f4a2c10")),
                       type: "TV",
                       startDate: "Sep 2009",
                       endDate: nil)
